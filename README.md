@@ -28,19 +28,25 @@ import Networking
 enum API {
     enum Login: Networkable {
         /// Login with username and password
-        case login(request: LoginRequest)
+        case loginGet(username: String, password: String)
+        /// Login with username and password
+        case loginPost(request: LoginRequest)
         
         var request: URLRequest {
             switch self {
-            case .login(let request):
-                return getRequest(url: API.getURL(endpoint: "Login"),
+            case .loginGet(let username, let password):
+                return getRequest(url: API.getURL(endpoint: "LoginPOST"),
                                   encodable: request)
+            case .loginPost(let request):
+                return getRequest(url: API.getURL(endpoint: "LoginGET"),
+                                  queryItems: ["username": username, "password": password])
+
             }
         }
     }
     
     private static func getURL(endpoint: String) -> URL {
-        let baseEndpoint = Bundle.main.infoForKey("BASE_URL") ?? ""
+        let baseEndpoint = "https://example.com/api/"
         return URL(forceString: "\(baseEndpoint)\(endpoint)")
     }
 }
