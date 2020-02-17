@@ -21,7 +21,9 @@ extension Networkable {
     public func getRequest(url: URL, queryItems: [String: String] = [:],
                            headers: [String: String] = [:]) -> URLRequest {
         let url = url.adding(parameters: queryItems)
-        return getRequest(with: url, httpMethod: .GET, headers: headers)
+        var request = getRequest(with: url, httpMethod: .GET, headers: headers)
+        request.timeoutInterval = Session.shared.timeout.request
+        return request
     }
     
     /**
@@ -35,6 +37,7 @@ extension Networkable {
                                          headers: [String: String] = [:]) -> URLRequest {
         var request = getRequest(with: url, httpMethod: .POST, headers: headers)
         request.httpBody = try? JSONEncoder().encode(data)
+        request.timeoutInterval = Session.shared.timeout.request
         return request
     }
     
