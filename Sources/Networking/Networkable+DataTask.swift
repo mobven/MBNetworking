@@ -39,7 +39,7 @@ extension Networkable {
     
     private func requestData(_ urlRequest: URLRequest, completion: @escaping ((Data?, Error?) -> Void)) {
         printRequest(urlRequest.url?.absoluteString ?? "", urlRequest.allHTTPHeaderFields, urlRequest.httpBody)
-        let task = Session.shared().session
+        let task = Session.shared.session
             .dataTask(with: urlRequest, completionHandler: { (data, response, error) in
                 DispatchQueue.main.async {
                     completion(data, error)

@@ -11,19 +11,10 @@ import Security
 
 internal class URLSessionPinningDelegate: NSObject, URLSessionDelegate {
     
-    private(set) var certificatePath: String?
-    
-    init(certificatePath: String?) {
-        self.certificatePath = certificatePath
-    }
+    var certificatePaths: [String] = []
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
                     completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        guard let certificatePath = certificatePath else {
-            completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
-            return
-        }
-        
         var secresult = SecTrustResultType.invalid
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
             let serverTrust = challenge.protectionSpace.serverTrust,
@@ -38,12 +29,15 @@ internal class URLSessionPinningDelegate: NSObject, URLSessionDelegate {
         let data = CFDataGetBytePtr(serverCertificateData)
         let size = CFDataGetLength(serverCertificateData)
         let cert1 = NSData(bytes: data, length: size)
-        if let cert2 = NSData(contentsOfFile: certificatePath) as Data?,
-            cert1.isEqual(to: cert2) {
-            completionHandler(URLSession.AuthChallengeDisposition.useCredential,
-                              URLCredential(trust: serverTrust))
-            return
+        for certificatePath in certificatePaths {
+            if let cert2 = NSData(contentsOfFile: certificatePath) as Data?,
+                cert1.isEqual(to: cert2) {
+                completionHandler(URLSession.AuthChallengeDisposition.useCredential,
+                                  URLCredential(trust: serverTrust))
+                return
+            }
         }
+        completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
     }
     
 }

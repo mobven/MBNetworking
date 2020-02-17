@@ -10,18 +10,12 @@ import Foundation
 
 class Session {
     
-    private static var session: Session!
-    
-    class func shared(certificatePath: String? = nil) -> Session {
-        guard self.session == nil else { return session }
-        let session = Session(certificatePath: certificatePath)
-        self.session = session
-        return session
-    }
+    static let shared = Session()
     
     var session: URLSession
     var delegate: URLSessionDelegate
     
+    /// Timeout for requets.
     var timeout: TimeOut {
         didSet {
             self.session.configuration.timeoutIntervalForRequest = timeout.request
@@ -29,10 +23,17 @@ class Session {
         }
     }
     
-    required init(certificatePath: String? = nil) {
+    /// SSL certificate paths of `URLSessionDelegate`.
+    var certificatePaths: [String] = [] {
+        didSet {
+            (delegate as? URLSessionPinningDelegate)?.certificatePaths = certificatePaths
+        }
+    }
+    
+    required init() {
         let configuration = URLSession.shared.configuration
-        timeout = TimeOut(request: 30, resource: 30)
-        delegate = URLSessionPinningDelegate(certificatePath: certificatePath)
+        timeout = TimeOut(request: 60, resource: 60)
+        delegate = URLSessionPinningDelegate()
         self.session = URLSession(configuration: configuration,
                                   delegate: delegate,
                                   delegateQueue: nil)

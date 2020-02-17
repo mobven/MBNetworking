@@ -62,4 +62,16 @@ struct LoginResponse: Decodable {
 ```
 
 ## Advanced usage
-// TODO: Requests timeouts, SSL pinning and etc. 
+### Timeouts
+By default, request timeouts are 60 seconds for request and resource which are relatively equivalent to `URLSessionConfiguration`'s `timeoutIntervalForRequest` and `timeoutIntervalForResource` parameters. Currently `Networking` supports timeouts to be set globally, so once changed new value will be applied to all next requests. Having different timout for each single request is planned to be supported in the future to enable `Networkable` include `timeout` parameter.
+```swift
+NetworkableConfigs.default.setTimeout(for: 30, resource: 30)
+```
+
+### SSL Pinning
+`Networking`, like setting timeout, supports only global certificate set via:
+```swift
+if let path = Bundle.main.path(forResource: "certificate", ofType: "der") {
+    NetworkableConfigs.default.setCertificatePaths(path)
+}
+```
