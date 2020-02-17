@@ -1,10 +1,10 @@
 # Networking
 
-Networking framework based on `URLSession.dataTask()`.   
+Networking is framework based on `URLSession`. It's evolved from the idea of replacing `Alamofire` (in some projects also `Moya`) with native `URLSession` functions.
 
 ## Requirements
 
-- iOS 10.0+
+- iOS 9.0+
 - Xcode 11.3+
 - Swift 5+
 - Swift Package Manager
@@ -20,26 +20,26 @@ https://github.com/mobven/Networking
 ```
 
 ## Usage
-Networking framework has been evolved from the idea of replacing `Alamofire` (in some projects also `Moya`) with native `URLSession` functions. Its functionalities can be achieved creating enums which conform to `Networkable` protocol and overriding its `request` parameter. Later, when `fetch` called  `Networkable` uses this `request` to proceed the request.  
+Networkable functionalities can be achieved creating enums which conform to `Networkable` protocol and overriding its `request` parameter. Later, when `fetch` is called,  `Networkable` uses this `request` to proceed the request.  
 
 ### Creating Networkables
 ```swift
 import Networking
 enum API {
     enum Login: Networkable {
-        /// Login with username and password
+        /// Login with username and password with GET request.
         case loginGet(username: String, password: String)
-        /// Login with username and password
+        /// Login with username and password with POST request.
         case loginPost(request: LoginRequest)
         
         var request: URLRequest {
             switch self {
             case .loginGet(let username, let password):
                 return getRequest(url: API.getURL(endpoint: "LoginPOST"),
-                                  encodable: request)
+                                  queryItems: ["username": username, "password": password])
             case .loginPost(let request):
                 return getRequest(url: API.getURL(endpoint: "LoginGET"),
-                                  queryItems: ["username": username, "password": password])
+                                  encodable: request)
 
             }
         }
@@ -58,7 +58,10 @@ struct LoginRequest: Encodable {
 
 ### Fetching data from Networkables 
 ```swift
-API.Auth.login(request: request).fetch { (response: LoginResponse, error: Error) in
+API.Login.loginGet(username: "admin", password: "admin").fetch { (response: LoginResponse, error: Error) in
+    
+}
+API.Login.loginPost(request: LoginRequest(username: "admin", password: "admin")).fetch { (response: LoginResponse, error: Error) in
     
 }
 struct LoginResponse: Decodable {
@@ -75,7 +78,7 @@ NetworkableConfigs.default.setTimeout(for: 30, resource: 30)
 ```
 
 ### SSL Pinning
-`Networking`, like setting timeout, supports only global certificate set via:
+`Networking`, like setting timeout, supports only global certificates set via:
 ```swift
 if let path = Bundle.main.path(forResource: "certificate", ofType: "der") {
     NetworkableConfigs.default.setCertificatePaths(path)
