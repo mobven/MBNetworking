@@ -15,29 +15,43 @@ internal class URLSessionPinningDelegate: NSObject, URLSessionDelegate {
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
                     completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        guard let serverCertificate = getServerCertificate(forChallenge: challenge) else {
+            completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil)
+            return
+        }
+        let data = CFDataGetBytePtr(serverCertificate.data)
+        let size = CFDataGetLength(serverCertificate.data)
+        let cert1 = NSData(bytes: data, length: size)
+        for certificatePath in certificatePaths {
+            if let cert2 = NSData(contentsOfFile: certificatePath) as Data?,
+                cert1.isEqual(to: cert2) {
+                completionHandler(URLSession.AuthChallengeDisposition.useCredential,
+                                  URLCredential(trust: serverCertificate.trust))
+                return
+            }
+        }
+        if certificatePaths.count == 0 {
+            // No SSL pinning. Performing default handling.
+            completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
+        } else {
+            // SSL pinning could not succeed with given certificates. Cancelling authentication.
+            completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil)
+        }
+    }
+    
+    private func getServerCertificate(
+        forChallenge challenge: URLAuthenticationChallenge) -> (data: CFData, trust: SecTrust)? {
         var secresult = SecTrustResultType.invalid
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
             let serverTrust = challenge.protectionSpace.serverTrust,
             errSecSuccess == SecTrustEvaluate(serverTrust, &secresult),
             let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0)
             else {
-                completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil)
-                return
+                return nil
         }
         
         let serverCertificateData = SecCertificateCopyData(serverCertificate)
-        let data = CFDataGetBytePtr(serverCertificateData)
-        let size = CFDataGetLength(serverCertificateData)
-        let cert1 = NSData(bytes: data, length: size)
-        for certificatePath in certificatePaths {
-            if let cert2 = NSData(contentsOfFile: certificatePath) as Data?,
-                cert1.isEqual(to: cert2) {
-                completionHandler(URLSession.AuthChallengeDisposition.useCredential,
-                                  URLCredential(trust: serverTrust))
-                return
-            }
-        }
-        completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
+        return (serverCertificateData, serverTrust)
     }
     
 }
