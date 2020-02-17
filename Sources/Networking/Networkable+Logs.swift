@@ -13,7 +13,7 @@ extension Networkable {
     
     func printRequest(_ url: String, _ headers: [String: String]?, _ data: Data?) {
         #if DEBUG
-        print("\n\n\n\n")
+        print("\n\n")
         print("<-------- REQUEST -------->")
         print("Endpoint: \(url)")
         print("Headers: \(headers ?? [:])")
@@ -24,7 +24,7 @@ extension Networkable {
     
     func printResponse(_ data: Data?) {
         #if DEBUG
-        print("\n\n\n\n")
+        print("\n\n")
         print("<-------- RESPONSE -------->")
         printData(data)
         print("<-------- RESPONSE -------->")
