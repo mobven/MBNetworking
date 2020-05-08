@@ -63,6 +63,16 @@ API.Login.loginGet(username: "admin", password: "admin").fetch { (response: Logi
 API.Login.loginPost(request: LoginRequest(username: "admin", password: "admin")).fetch { (response: LoginResponse?, error: Error?) in
     
 }
+
+API.Login.loginGet(username: "admin", password: "admin").fetch.fetchResult(type: Decodable.Type) { result in
+    switch result {
+    case .success(let response):
+        
+    case .failure(let error):
+        
+    }
+}
+
 struct LoginResponse: Decodable {
     var name: String?
     var surname: String?
