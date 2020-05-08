@@ -64,7 +64,7 @@ API.Login.loginPost(request: LoginRequest(username: "admin", password: "admin"))
     
 }
 
-API.Login.loginGet(username: "admin", password: "admin").fetch.fetchResult(type: Decodable.Type) { result in
+API.Login.loginGet(username: "admin", password: "admin").fetchResult(type: Decodable.Type) { result in
     switch result {
     case .success(let response):
         
