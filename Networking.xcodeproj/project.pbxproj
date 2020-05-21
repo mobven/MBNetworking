@@ -143,7 +143,6 @@
 			isa = PBXGroup;
 			children = (
 				6DD4518623FABAF1009A95BC /* LinuxMain.swift */,
-				6F908090246564540022DB7A /* ResultTests */,
 				6DD4518723FABAF1009A95BC /* NetworkingTests */,
 			);
 			path = Tests;
@@ -153,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				6DD4518823FABAF1009A95BC /* XCTestManifests.swift */,
+				6F908090246564540022DB7A /* ResultTests */,
 				6DD4518B23FABB91009A95BC /* NetworkingTests.swift */,
 			);
 			path = NetworkingTests;
