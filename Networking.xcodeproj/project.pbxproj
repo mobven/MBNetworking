@@ -115,7 +115,7 @@
 			path = NetworkingTests;
 			sourceTree = "<group>";
 		};
-		6DD4513823FAB3FE009A95BC /* Sources */ = {
+		6D5754E024769AD200C23C48 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
 				6DD4513B23FAB3FE009A95BC /* Session.swift */,
@@ -127,6 +127,14 @@
 				6F587AC7246610D900DD696C /* Networkable+Result.swift */,
 				6F587AC8246610D900DD696C /* NetworkingError.swift */,
 				6DD4513D23FAB3FE009A95BC /* URL.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		6DD4513823FAB3FE009A95BC /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				6D5754E024769AD200C23C48 /* Networking */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
