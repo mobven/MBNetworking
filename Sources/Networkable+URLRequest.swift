@@ -14,9 +14,10 @@ extension Networkable {
     /**
      Returns GET `URLRequest` with specified url and query item.
      
-     - parameter url:`URL`.
-     - parameter queryItems: Query items to be appended to the url, eg, pageSize: 10 will be appended to url as &pageSize=10.
-     - returns: URLRequest with specified url and query item.
+     - parameter url:        `URL`.
+     - parameter queryItems: Query items to be appended to the url,
+     eg, pageSize: 10 will be appended to url as &pageSize=10.
+     - returns:              URLRequest with specified url and query item.
      */
     public func getRequest(url: URL, queryItems: [String: String] = [:],
                            headers: [String: String] = [:]) -> URLRequest {
@@ -78,8 +79,8 @@ enum NetworkContentType: String {
 enum RequestType: String {
     
     /// HTTP GET request
-    case GET = "GET"
+    case GET
     /// HTTP POST request
-    case POST = "POST"
+    case POST
     
 }

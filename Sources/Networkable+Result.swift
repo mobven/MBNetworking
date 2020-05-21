@@ -10,16 +10,19 @@ import Foundation
 
 extension Networkable {
     
-    
     /// Fetch data with specified parameters and return back with the completion.
     /// - Parameters:
-    ///   - type: `Decodable`  type which fetched `Data` will cenvert if possible
-    ///   - completion: Completion block to return response with the object confirming `Result<Decodable, NetworkingError>`
+    ///   - type:       `Decodable`  type which fetched `Data` will cenvert if possible
+    ///   - completion: Completion block to return response with the object
+    ///                 confirming `Result<Decodable, NetworkingError>`
     public func fetchResult<V: Decodable>(type: V.Type, completion: @escaping ((Result<V, NetworkingError>) -> Void)) {
         self.fetch(request, completion: completion)
     }
     
-    private func fetch<V: Decodable>(_ urlRequest: URLRequest, completion: @escaping ((Result<V, NetworkingError>) -> Void)) {
+    private func fetch<V: Decodable>(
+        _ urlRequest: URLRequest,
+        completion: @escaping ((Result<V, NetworkingError>) -> Void)
+    ) {
         requestData(urlRequest) { (response, data, error) in
             
             if let error = error,
@@ -40,7 +43,7 @@ extension Networkable {
                 
                 completion(.failure(.dataTaskError(response, data)))
                 
-            }  else if let data = data, data.count > 0 {
+            } else if let data = data, data.count > 0 {
                 
                 do {
                     let decodableData = try JSONDecoder().decode(V.self, from: data)
@@ -77,6 +80,5 @@ extension Networkable {
             })
         task.resume()
     }
-    
     
 }

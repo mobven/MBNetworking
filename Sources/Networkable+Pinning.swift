@@ -60,7 +60,8 @@ internal class UntrustedURLSessionDelegate: NSObject, URLSessionDelegate {
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
                     completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        completionHandler(URLSession.AuthChallengeDisposition.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
+        completionHandler(URLSession.AuthChallengeDisposition.useCredential,
+                          URLCredential(trust: challenge.protectionSpace.serverTrust!))
     }
     
 }

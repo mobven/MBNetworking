@@ -14,7 +14,7 @@ enum ResultTestAPI: Networkable {
     case fetch
     case underlyingError
     case httpError
-
+    
     var request: URLRequest {
         switch self {
             
@@ -26,9 +26,9 @@ enum ResultTestAPI: Networkable {
             return getRequest(url: url, queryItems: ["media": "music"])
         case .httpError:
             let url = URL(forceString: "https://itunes.apple.com/search")
-            return getRequest(url: url,queryItems: ["media": "0"])
+            return getRequest(url: url, queryItems: ["media": "0"])
         }
         
     }
-
+    
 }

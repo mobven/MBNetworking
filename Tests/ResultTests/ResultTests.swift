@@ -17,15 +17,6 @@ struct DecodableTrue: Decodable {
     var resultCount: Int?
 }
 
-//var exceptedData = """
-//{
-//  "results" : [
-//
-//  ],
-//  "resultCount" : 0
-//}
-//"""
-
 class ResultTests: XCTestCase {
 
     func testDecodableWrong() {
@@ -34,7 +25,7 @@ class ResultTests: XCTestCase {
         ResultTestAPI.fetch.fetchResult(type: DecodableWrong.self) { result in
             switch result {
             case .success:
-                XCTFail()
+                XCTFail("Result should fail.")
             case .failure(let error):
                 XCTAssertTrue(error.errorTitle == "Decoding Error")
             }
@@ -42,7 +33,7 @@ class ResultTests: XCTestCase {
             expectation.fulfill()
         }
 
-        let _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
+        _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
     }
     
     func testDecodableTrue() {
@@ -53,13 +44,13 @@ class ResultTests: XCTestCase {
             case .success(let response):
                 XCTAssertTrue(response.resultCount == 0)
             case .failure:
-                XCTFail()
+                XCTFail("Result should succeed.")
             }
             
             expectation.fulfill()
         }
         
-        let _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
+        _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
     }
     
     func testUnderlyingError() {
@@ -68,7 +59,7 @@ class ResultTests: XCTestCase {
         ResultTestAPI.underlyingError.fetchResult(type: DecodableTrue.self) { result in
             switch result {
             case .success:
-                XCTFail()
+                XCTFail("Result should fail.")
             case .failure(let error):
                 XCTAssertTrue(error.errorTitle == "Underlying Error")
             }
@@ -76,7 +67,7 @@ class ResultTests: XCTestCase {
             expectation.fulfill()
         }
         
-        let _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
+        _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
     }
     
     func testHTTPError() {
@@ -85,7 +76,7 @@ class ResultTests: XCTestCase {
         ResultTestAPI.httpError.fetchResult(type: DecodableTrue.self) { result in
             switch result {
             case .success:
-                XCTFail()
+                XCTFail("Result should fail.")
             case .failure(let error):
                 XCTAssertTrue(error.errorTitle == "HTTP Error")
             }
@@ -93,26 +84,26 @@ class ResultTests: XCTestCase {
             expectation.fulfill()
         }
         
-        let _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
+        _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
     }
 
     func testNetworkError() {
         // Must be test on connection off
-//
-//        let expectation = XCTestExpectation(description: "Network Test")
+        return
+        let expectation = XCTestExpectation(description: "Network Test")
         
-//        ResultTestAPI.fetch.fetchResult(type: DecodableTrue.self) { result in
-//            switch result {
-//            case .success:
-//                XCTFail()
-//            case .failure(let error):
-//                XCTAssertTrue(error.errorTitle == "Network Error")
-//            }
-//
-//            expectation.fulfill()
-//        }
-//
-//        let _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
+        ResultTestAPI.fetch.fetchResult(type: DecodableTrue.self) { result in
+            switch result {
+            case .success:
+                XCTFail("Result should fail.")
+            case .failure(let error):
+                XCTAssertTrue(error.errorTitle == "Network Error")
+            }
+
+            expectation.fulfill()
+        }
+
+        _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
     }
     
 }

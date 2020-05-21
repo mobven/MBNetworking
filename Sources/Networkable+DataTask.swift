@@ -16,7 +16,7 @@ extension Networkable {
      
      - parameter completion: Completion block to return response with the object confirming `Decodable`.
      */
-    public func fetch<V: Decodable>(completion: @escaping (V?, Error?) -> ()) {
+    public func fetch<V: Decodable>(completion: @escaping (V?, Error?) -> Void) {
         fetch(request) { (data, error) in
             completion(data, error)
         }
@@ -40,7 +40,7 @@ extension Networkable {
     private func requestData(_ urlRequest: URLRequest, completion: @escaping ((Data?, Error?) -> Void)) {
         printRequest(urlRequest.url?.absoluteString ?? "", urlRequest.allHTTPHeaderFields, urlRequest.httpBody)
         let task = Session.shared.session
-            .dataTask(with: urlRequest, completionHandler: { (data, response, error) in
+            .dataTask(with: urlRequest, completionHandler: { (data, _, error) in
                 DispatchQueue.main.async {
                     completion(data, error)
                     self.printResponse(data)
