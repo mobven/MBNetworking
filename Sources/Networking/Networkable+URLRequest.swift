@@ -16,19 +16,17 @@ extension Networkable {
      
      - parameter url:         `URL`.
      - parameter queryItems:  Query items to be appended to the url,
-                              eg, pageSize: 10 will be appended to url as &pageSize=10.
+     eg, pageSize: 10 will be appended to url as &pageSize=10.
      - parameter headers:     HTTP headers.
-     - parameter contentType: Content-Type of the request.
      - returns: `URLRequest` with specified url and query item.
      */
     public func getRequest(url: URL, queryItems: [String: String] = [:],
-                           headers: [String: String] = [:],
-                           contentType: NetworkContentType = .json) -> URLRequest {
+                           headers: [String: String] = [:]) -> URLRequest {
         let url = url.adding(parameters: queryItems)
         var request = getRequest(with: url,
                                  httpMethod: .GET,
                                  headers: headers,
-                                 contentType: contentType)
+                                 contentType: .json)
         request.timeoutInterval = Session.shared.timeout.request
         return request
     }
@@ -39,16 +37,34 @@ extension Networkable {
      - parameter url:         `URL`.
      - parameter encodable:   Any object confirming `Encodable` to be used in `URLRequest.httpBody`.
      - parameter headers:     HTTP headers.
-     - parameter contentType: Content-Type of the request.
      - returns: `URLRequest` with specified url and encodable body object.
      */
     public func getRequest<T: Encodable>(url: URL,
                                          encodable data: T,
-                                         headers: [String: String] = [:],
-                                         contentType: NetworkContentType = .json) -> URLRequest {
+                                         headers: [String: String] = [:]) -> URLRequest {
         var request = getRequest(with: url, httpMethod: .POST,
-                                 headers: headers, contentType: contentType)
+                                 headers: headers, contentType: .json)
         request.httpBody = try? JSONEncoder().encode(data)
+        request.timeoutInterval = Session.shared.timeout.request
+        return request
+    }
+    
+    /**
+     Returns POST `URLRequest` with specified url and encodable body object.
+     
+     - parameter url:         `URL`.
+     - parameter formItems:   HashMap to be used in `URLRequest.httpBody`.
+     - parameter headers:     HTTP headers.
+     - parameter contentType: Content-Type of the request.
+     - returns: `URLRequest` with specified url and encodable body object.
+     */
+    public func getRequest(url: URL,
+                           formItems: [String: String] = [:],
+                           headers: [String: String] = [:]) -> URLRequest {
+        let formData = formItems.map({ "\($0.key)=\($0.value)" }).joined(separator: "&")
+        var request = getRequest(with: url, httpMethod: .POST,
+                                 headers: headers, contentType: .urlencoded)
+        request.httpBody = formData.data(using: .utf8)
         request.timeoutInterval = Session.shared.timeout.request
         return request
     }
