@@ -41,9 +41,9 @@ extension Networkable {
         printRequest(urlRequest.url?.absoluteString ?? "", urlRequest.allHTTPHeaderFields, urlRequest.httpBody)
         let task = Session.shared.session
             .dataTask(with: urlRequest, completionHandler: { (data, _, error) in
+                self.printResponse(data)
                 DispatchQueue.main.async {
                     completion(data, error)
-                    self.printResponse(data)
                 }
             })
         task.resume()
