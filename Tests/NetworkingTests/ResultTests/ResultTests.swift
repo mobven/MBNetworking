@@ -22,7 +22,7 @@ class ResultTests: XCTestCase {
     func testDecodableWrong() {
         let expectation = XCTestExpectation(description: "Decodable Test")
         
-        ResultTestAPI.fetch.fetchResult(type: DecodableWrong.self) { result in
+        ResultTestAPI.fetch.fetch(DecodableWrong.self) { result in
             switch result {
             case .success:
                 XCTFail("Result should fail.")
@@ -39,7 +39,7 @@ class ResultTests: XCTestCase {
     func testDecodableTrue() {
         let expectation = XCTestExpectation(description: "Decodable Test")
         
-        ResultTestAPI.fetch.fetchResult(type: DecodableTrue.self) { result in
+        ResultTestAPI.fetch.fetch(DecodableTrue.self) { result in
             switch result {
             case .success(let response):
                 XCTAssertTrue(response.resultCount == 0)
@@ -56,7 +56,7 @@ class ResultTests: XCTestCase {
     func testUnderlyingError() {
         let expectation = XCTestExpectation(description: "Underlying Test")
         
-        ResultTestAPI.underlyingError.fetchResult(type: DecodableTrue.self) { result in
+        ResultTestAPI.underlyingError.fetch(DecodableTrue.self) { result in
             switch result {
             case .success:
                 XCTFail("Result should fail.")
@@ -73,7 +73,7 @@ class ResultTests: XCTestCase {
     func testHTTPError() {
         let expectation = XCTestExpectation(description: "HTTP Test")
         
-        ResultTestAPI.httpError.fetchResult(type: DecodableTrue.self) { result in
+        ResultTestAPI.httpError.fetch(DecodableTrue.self) { result in
             switch result {
             case .success:
                 XCTFail("Result should fail.")
@@ -92,7 +92,7 @@ class ResultTests: XCTestCase {
         return
         let expectation = XCTestExpectation(description: "Network Test")
         
-        ResultTestAPI.fetch.fetchResult(type: DecodableTrue.self) { result in
+        ResultTestAPI.fetch.fetch(DecodableTrue.self) { result in
             switch result {
             case .success:
                 XCTFail("Result should fail.")
