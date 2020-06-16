@@ -13,7 +13,11 @@ public enum NetworkingError: Error {
     /// Indicates a response failed for cannot connect `Internet Network`.
     case networkConnectionError(Error?)
     
-    /// Indicates a response failed to map to a `Decodable` object.
+    /// Indicates that request failed while encoding to a `Encodable` object.
+    /// Anyway, request were proceeded with `nil` body.
+    case encodingError(Error, URLRequest)
+    
+    /// Indicates that request failed while decoding to a `Decodable` object.
     case decodingError(Error, URLResponse?)
     
     /// Indicates a response failed with an invalid `HTTP Status Code`.
@@ -34,6 +38,7 @@ extension NetworkingError {
     var errorTitle: String {
         switch self {
         case .networkConnectionError: return "Network Connection Error"
+        case .encodingError: return "Encoding Error"
         case .decodingError: return "Decoding Error"
         case .httpError: return "HTTP Error"
         case .dataTaskError: return "Data Task Error"
@@ -45,6 +50,7 @@ extension NetworkingError {
     var response: URLResponse? {
         switch self {
         case .networkConnectionError: return nil
+        case .encodingError: return nil
         case .decodingError(_, let response): return response
         case .httpError(_, let response): return response
         case .dataTaskError(let response, _): return response
@@ -57,7 +63,7 @@ extension NetworkingError {
         switch self {
         case .networkConnectionError(let error):
             return "\n Colundn't connect internet network. \n\(error?.localizedDescription ?? "")"
-        case .decodingError(let error, _):
+        case .decodingError(let error, _), .encodingError(let error, _):
             return error.localizedDescription
         case .httpError(let error, let response):
             return "\nStatus Code: \(response.statusCode.description) \n\(error?.localizedDescription ?? "")\n"
