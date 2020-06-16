@@ -464,7 +464,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = RE9892F24F;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -477,7 +477,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.7;
+				MARKETING_VERSION = 0.9.8;
 				PRODUCT_BUNDLE_IDENTIFIER = mobven.com.Networking;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -493,7 +493,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = RE9892F24F;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -506,7 +506,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.7;
+				MARKETING_VERSION = 0.9.8;
 				PRODUCT_BUNDLE_IDENTIFIER = mobven.com.Networking;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
