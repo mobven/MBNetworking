@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ErrorKit",
+        "repositoryURL": "https://github.com/mobven/ErrorKit.git",
+        "state": {
+          "branch": "develop",
+          "revision": "1b4c88057d35d0757c0e1d593f6a493e7c927a86",
+          "version": null
+        }
+      },
+      {
+        "package": "MMBKit",
+        "repositoryURL": "https://github.com/mobven/MMBKit.git",
+        "state": {
+          "branch": "develop",
+          "revision": "7ac0c1904a2e6f1acacf84fa79ffb497925d57ae",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
