@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ErrorKit
 
 /// `Networkable` extension related to `URLRequest`'s.
 extension Networkable {
@@ -44,7 +45,13 @@ extension Networkable {
                                          headers: [String: String] = [:]) -> URLRequest {
         var request = getRequest(with: url, httpMethod: .POST,
                                  headers: headers, contentType: .json)
-        request.httpBody = try? JSONEncoder().encode(data)
+        do {
+            request.httpBody = try JSONEncoder().encode(data)
+        } catch {
+            ErrorKit.shared.delegate?.errorKitDidCatch(
+                serializationError: NetworkingError.encodingError(error, request)
+            )
+        }
         request.timeoutInterval = Session.shared.timeout.request
         return request
     }
