@@ -21,10 +21,10 @@ internal class URLSessionPinningDelegate: NSObject, URLSessionDelegate {
         }
         let data = CFDataGetBytePtr(serverCertificate.data)
         let size = CFDataGetLength(serverCertificate.data)
-        let cert1 = NSData(bytes: data, length: size)
+        let serverCertificateData = NSData(bytes: data, length: size)
         for certificatePath in certificatePaths {
-            if let cert2 = NSData(contentsOfFile: certificatePath) as Data?,
-                cert1.isEqual(to: cert2) {
+            if let localCertificateData = NSData(contentsOfFile: certificatePath) as Data?,
+                serverCertificateData.isEqual(to: localCertificateData) {
                 completionHandler(URLSession.AuthChallengeDisposition.useCredential,
                                   URLCredential(trust: serverCertificate.trust))
                 return
@@ -60,7 +60,8 @@ internal class UntrustedURLSessionDelegate: NSObject, URLSessionDelegate {
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
                     completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        completionHandler(URLSession.AuthChallengeDisposition.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
+        completionHandler(URLSession.AuthChallengeDisposition.useCredential,
+                          URLCredential(trust: challenge.protectionSpace.serverTrust!))
     }
     
 }

@@ -1,18 +1,17 @@
 # Networking
 
-Networking is framework based on `URLSession`. It's evolved from the idea of replacing `Alamofire` (in some projects also `Moya`) with native `URLSession` functions.
+Networking is a design-pattern framework based on Apple's `URLSession`. It's evolved from the idea of replacing `Alamofire` (in some projects also `Moya`) with native `URLSession` functions.
 
 ## Requirements
 
 - iOS 9.0+
 - Xcode 11.3+
 - Swift 5+
-- Swift Package Manager
 
 ## Installation
 
 ### Swift Package Manager
-Framework is supported only via Swift Package Manager and is not planned to be distributed otherwise, unless there is a specific requirement. As Swift Package Manager is stable currently and there is an active development on it which promises it will be used for a while.
+Framework is supported only via Swift Package Manager and is not planned to be distributed otherwise, unless there is a specific requirement. As Swift Package Manager is the first official distribution tool managed by Apple for Swift, it's stable currently and there is an active development on it which promises it will be used for a while.
 
 Project can be installed using SPM with its github URL.
 ```bash
@@ -58,11 +57,21 @@ struct LoginRequest: Encodable {
 
 ### Fetching data from Networkables 
 ```swift
-API.Login.loginGet(username: "admin", password: "admin").fetch { (response: LoginResponse, error: Error) in
-    
+API.Login.loginGet(username: "admin", password: "admin").fetch(LoginResponse.self) { result in
+    switch result {
+    case .success(let response):
+        print("Succeeded with \(response)")
+    case .failure(let error):
+        print("Failed with \(error)")
+    }
 }
-API.Login.loginPost(request: LoginRequest(username: "admin", password: "admin")).fetch { (response: LoginResponse, error: Error) in
-    
+API.Login.loginPost(request: LoginRequest(username: "admin", password: "admin")).fetch(LoginResponse.self) { result in
+    switch result {
+    case .success(let response):
+        print("Succeeded with \(response)")
+    case .failure(let error):
+        print("Failed with \(error)")
+    }
 }
 struct LoginResponse: Decodable {
     var name: String?
@@ -72,7 +81,7 @@ struct LoginResponse: Decodable {
 
 ## Advanced usage
 ### Timeouts
-By default, request timeouts are 60 seconds for request and resource which are relatively equivalent to `URLSessionConfiguration`'s `timeoutIntervalForRequest` and `timeoutIntervalForResource` parameters. Currently `Networking` supports timeouts to be set globally, so once changed new value will be applied to all next requests. Having different timout for each single request is planned to be supported in the future to enable `Networkable` include `timeout` parameter.
+By default, request timeouts are 60 seconds for request and resource which are relatively equivalent to `URLSessionConfiguration`'s `timeoutIntervalForRequest` and `timeoutIntervalForResource` parameters. Currently `Networking` supports timeouts to be set globally, so once changed new value will be applied to all next requests. Having different timeout for each single request is planned to be supported in the future to enable `Networkable` include `timeout` parameter.
 ```swift
 NetworkableConfigs.default.setTimeout(for: 30, resource: 30)
 ```
