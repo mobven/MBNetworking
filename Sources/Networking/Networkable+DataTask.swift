@@ -35,14 +35,14 @@ extension Networkable {
                 
             } else if let error = error {
                 
-                let error = NetworkingError.underlyingError(error, response)
+                let error = NetworkingError.underlyingError(error, response, data)
                 ErrorKit.shared.delegate?.errorKitDidCatch(networkingError: error)
                 completion(.failure(error))
                 
             } else if let httpResponse = response as? HTTPURLResponse,
                 self.isSuccess(httpResponse.statusCode) {
                 
-                let error = NetworkingError.httpError(error, httpResponse)
+                let error = NetworkingError.httpError(error, httpResponse, data)
                 ErrorKit.shared.delegate?.errorKitDidCatch(networkingError: error)
                 completion(.failure(error))
                 
@@ -58,14 +58,14 @@ extension Networkable {
                     let decodableData = try JSONDecoder().decode(V.self, from: data)
                     completion(.success(decodableData))
                 } catch let sError {
-                    let error = NetworkingError.decodingError(sError, response)
+                    let error = NetworkingError.decodingError(sError, response, data)
                     ErrorKit.shared.delegate?.errorKitDidCatch(serializationError: error)
                     completion(.failure(error))
                 }
                 
             } else {
                 
-                let error = NetworkingError.unkownError(error)
+                let error = NetworkingError.unkownError(error, data)
                 ErrorKit.shared.delegate?.errorKitDidCatch(networkingError: error)
                 completion(.failure(error))
                 
