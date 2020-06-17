@@ -57,18 +57,20 @@ struct LoginRequest: Encodable {
 
 ### Fetching data from Networkables 
 ```swift
-API.Login.loginGet(username: "admin", password: "admin").fetch { (response: LoginResponse?, error: Error?) in
-    
-}
-API.Login.loginPost(request: LoginRequest(username: "admin", password: "admin")).fetch { (response: LoginResponse?, error: Error?) in
-    
-}
-API.Login.loginGet(username: "admin", password: "admin").fetchResult(type: LoginResponse.self) { result in
+API.Login.loginGet(username: "admin", password: "admin").fetch(LoginResponse.self) { result in
     switch result {
     case .success(let response):
-        
+        print("Succeeded with \(response)")
     case .failure(let error):
-        
+        print("Failed with \(error)")
+    }
+}
+API.Login.loginPost(request: LoginRequest(username: "admin", password: "admin")).fetch(LoginResponse.self) { result in
+    switch result {
+    case .success(let response):
+        print("Succeeded with \(response)")
+    case .failure(let error):
+        print("Failed with \(error)")
     }
 }
 struct LoginResponse: Decodable {
