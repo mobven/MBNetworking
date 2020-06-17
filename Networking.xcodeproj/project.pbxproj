@@ -13,7 +13,6 @@
 		6DA92BC0248465DD00014DF0 /* Networkable+DataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA92BB7248465DD00014DF0 /* Networkable+DataTask.swift */; };
 		6DA92BC1248465DD00014DF0 /* Networkable+Pinning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA92BB8248465DD00014DF0 /* Networkable+Pinning.swift */; };
 		6DA92BC2248465DD00014DF0 /* Networkable+URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA92BB9248465DD00014DF0 /* Networkable+URLRequest.swift */; };
-		6DA92BC3248465DD00014DF0 /* NetworkingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA92BBA248465DD00014DF0 /* NetworkingError.swift */; };
 		6DA92BC4248465DD00014DF0 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA92BBB248465DD00014DF0 /* Session.swift */; };
 		6DA92BC6248465DD00014DF0 /* Networkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA92BBD248465DD00014DF0 /* Networkable.swift */; };
 		6DA92BC7248465DD00014DF0 /* Networkable+Logs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA92BBE248465DD00014DF0 /* Networkable+Logs.swift */; };
@@ -43,7 +42,6 @@
 		6DA92BB7248465DD00014DF0 /* Networkable+DataTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Networkable+DataTask.swift"; path = "Sources/Networking/Networkable+DataTask.swift"; sourceTree = SOURCE_ROOT; };
 		6DA92BB8248465DD00014DF0 /* Networkable+Pinning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Networkable+Pinning.swift"; path = "Sources/Networking/Networkable+Pinning.swift"; sourceTree = SOURCE_ROOT; };
 		6DA92BB9248465DD00014DF0 /* Networkable+URLRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Networkable+URLRequest.swift"; path = "Sources/Networking/Networkable+URLRequest.swift"; sourceTree = SOURCE_ROOT; };
-		6DA92BBA248465DD00014DF0 /* NetworkingError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkingError.swift; path = Sources/Networking/NetworkingError.swift; sourceTree = SOURCE_ROOT; };
 		6DA92BBB248465DD00014DF0 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Session.swift; path = Sources/Networking/Session.swift; sourceTree = SOURCE_ROOT; };
 		6DA92BBD248465DD00014DF0 /* Networkable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Networkable.swift; path = Sources/Networking/Networkable.swift; sourceTree = SOURCE_ROOT; };
 		6DA92BBE248465DD00014DF0 /* Networkable+Logs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Networkable+Logs.swift"; path = "Sources/Networking/Networkable+Logs.swift"; sourceTree = SOURCE_ROOT; };
@@ -132,7 +130,6 @@
 				6DA92BBE248465DD00014DF0 /* Networkable+Logs.swift */,
 				6DA92BB8248465DD00014DF0 /* Networkable+Pinning.swift */,
 				6DA92BB9248465DD00014DF0 /* Networkable+URLRequest.swift */,
-				6DA92BBA248465DD00014DF0 /* NetworkingError.swift */,
 				6DA92BBB248465DD00014DF0 /* Session.swift */,
 				6DA92BBF248465DD00014DF0 /* URL.swift */,
 			);
@@ -312,7 +309,6 @@
 				6DA92BC8248465DD00014DF0 /* URL.swift in Sources */,
 				6DA92BC2248465DD00014DF0 /* Networkable+URLRequest.swift in Sources */,
 				6DA92BC6248465DD00014DF0 /* Networkable.swift in Sources */,
-				6DA92BC3248465DD00014DF0 /* NetworkingError.swift in Sources */,
 				6DA92BC0248465DD00014DF0 /* Networkable+DataTask.swift in Sources */,
 				6DA92BC7248465DD00014DF0 /* Networkable+Logs.swift in Sources */,
 			);
