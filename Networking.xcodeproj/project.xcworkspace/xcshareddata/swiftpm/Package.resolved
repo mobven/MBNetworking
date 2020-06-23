@@ -6,16 +6,16 @@
         "repositoryURL": "https://github.com/mobven/ErrorKit.git",
         "state": {
           "branch": "develop",
-          "revision": "4fb0d1a9c29ca63e93ec22d0e4d5dc4bed2ecc9a",
+          "revision": "9640770e22771ff02b4b18d784c3292321141053",
           "version": null
         }
       },
       {
-        "package": "MMBKit",
-        "repositoryURL": "https://github.com/mobven/MMBKit.git",
+        "package": "MobKit",
+        "repositoryURL": "https://github.com/mobven/MobKit.git",
         "state": {
           "branch": "develop",
-          "revision": "7ac0c1904a2e6f1acacf84fa79ffb497925d57ae",
+          "revision": "b81f6dae0c58cb358e52e0ede13e2ee023ecf262",
           "version": null
         }
       }
