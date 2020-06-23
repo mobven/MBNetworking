@@ -30,26 +30,26 @@ extension Networkable {
                 self.isNetworkConnectionError((error as NSError).code) {
                 
                 let error = NetworkingError.networkConnectionError(error)
-                ErrorKit.shared.delegate?.errorKitDidCatch(networkingError: error)
+                ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 completion(.failure(error))
                 
             } else if let error = error {
                 
                 let error = NetworkingError.underlyingError(error, response, data)
-                ErrorKit.shared.delegate?.errorKitDidCatch(networkingError: error)
+                ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 completion(.failure(error))
                 
             } else if let httpResponse = response as? HTTPURLResponse,
                 self.isSuccess(httpResponse.statusCode) {
                 
                 let error = NetworkingError.httpError(error, httpResponse, data)
-                ErrorKit.shared.delegate?.errorKitDidCatch(networkingError: error)
+                ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 completion(.failure(error))
                 
             } else if let response = response, data == nil || data?.count == 0 {
 
                 let error = NetworkingError.dataTaskError(response, data)
-                ErrorKit.shared.delegate?.errorKitDidCatch(networkingError: error)
+                ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 completion(.failure(error))
                 
             } else if let data = data, data.count > 0 {
@@ -59,14 +59,14 @@ extension Networkable {
                     completion(.success(decodableData))
                 } catch let sError {
                     let error = NetworkingError.decodingError(sError, response, data)
-                    ErrorKit.shared.delegate?.errorKitDidCatch(serializationError: error)
+                    ErrorKit.shared().delegate?.errorKitDidCatch(serializationError: error)
                     completion(.failure(error))
                 }
                 
             } else {
                 
                 let error = NetworkingError.unkownError(error, data)
-                ErrorKit.shared.delegate?.errorKitDidCatch(networkingError: error)
+                ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 completion(.failure(error))
                 
             }

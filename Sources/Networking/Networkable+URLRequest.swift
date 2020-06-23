@@ -48,7 +48,7 @@ extension Networkable {
         do {
             request.httpBody = try JSONEncoder().encode(data)
         } catch {
-            ErrorKit.shared.delegate?.errorKitDidCatch(
+            ErrorKit.shared().delegate?.errorKitDidCatch(
                 serializationError: NetworkingError.encodingError(error, request)
             )
         }
