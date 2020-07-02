@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6DA92B6E2484626500014DF0"
-               BuildableName = "Networking.framework"
-               BlueprintName = "Networking"
-               ReferencedContainer = "container:Networking.xcodeproj">
+               BuildableName = "MBNetworking.framework"
+               BlueprintName = "MBNetworking"
+               ReferencedContainer = "container:MBNetworking.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6DA92B6E2484626500014DF0"
-            BuildableName = "Networking.framework"
-            BlueprintName = "Networking"
-            ReferencedContainer = "container:Networking.xcodeproj">
+            BuildableName = "MBNetworking.framework"
+            BlueprintName = "MBNetworking"
+            ReferencedContainer = "container:MBNetworking.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
@@ -44,9 +44,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6DA92B772484626500014DF0"
-               BuildableName = "NetworkingTests.xctest"
-               BlueprintName = "NetworkingTests"
-               ReferencedContainer = "container:Networking.xcodeproj">
+               BuildableName = "MBNetworkingTests.xctest"
+               BlueprintName = "MBNetworkingTests"
+               ReferencedContainer = "container:MBNetworking.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6DA92B6E2484626500014DF0"
-            BuildableName = "Networking.framework"
-            BlueprintName = "Networking"
-            ReferencedContainer = "container:Networking.xcodeproj">
+            BuildableName = "MBNetworking.framework"
+            BlueprintName = "MBNetworking"
+            ReferencedContainer = "container:MBNetworking.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
