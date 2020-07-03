@@ -23,7 +23,7 @@ Networkable functionalities can be achieved creating enums which conform to `Net
 
 ### Creating Networkables
 ```swift
-import Networking
+import MBNetworking
 enum API {
     enum Login: Networkable {
         /// Login with username and password with GET request.

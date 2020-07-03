@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Networking
+@testable import MBNetworking
 
 struct DecodableWrong: Decodable {
     var resultCount: String?

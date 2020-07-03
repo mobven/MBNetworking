@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import ErrorKit
+import MBErrorKit
 
 /// `Networkable` extension related to `URLRequest`'s.
 extension Networkable {
