@@ -7,7 +7,7 @@
 //
 
 import Foundation
-@testable import Networking
+@testable import MBNetworking
 
 enum ResultTestAPI: Networkable {
     

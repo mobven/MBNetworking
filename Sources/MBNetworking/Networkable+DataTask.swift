@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import ErrorKit
+import MBErrorKit
 
 /// Networkable extension related to data tasks.
 extension Networkable {
