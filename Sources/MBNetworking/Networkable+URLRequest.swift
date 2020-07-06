@@ -48,8 +48,8 @@ extension Networkable {
         do {
             request.httpBody = try JSONEncoder().encode(data)
         } catch {
-            ErrorKit.shared().delegate?.errorKitDidCatch(
-                serializationError: NetworkingError.encodingError(error, request)
+            MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(
+                serializationError: MBErrorKit.NetworkingError.encodingError(error, request)
             )
         }
         request.timeoutInterval = Session.shared.timeout.request
