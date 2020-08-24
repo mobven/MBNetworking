@@ -51,6 +51,7 @@ extension Networkable {
             MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(
                 serializationError: MBErrorKit.NetworkingError.encodingError(error, request)
             )
+            printErrorLog(error)
         }
         request.timeoutInterval = Session.shared.timeout.request
         return request

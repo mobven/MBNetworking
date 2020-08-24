@@ -16,7 +16,10 @@ extension Networkable {
     /// - Parameters:
     ///   - type: Type of the result.
     ///   - completion: Completion block to return response as `Result`
-    public func fetch<V: Decodable>(_ type: V.Type, completion: @escaping ((Result<V, MBErrorKit.NetworkingError>) -> Void)) {
+    public func fetch<V: Decodable>(
+        _ type: V.Type,
+        completion: @escaping ((Result<V, MBErrorKit.NetworkingError>) -> Void)
+    ) {
         self.fetch(request, completion: completion)
     }
     
@@ -31,12 +34,14 @@ extension Networkable {
                 
                 let error = MBErrorKit.NetworkingError.networkConnectionError(error)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
+                self.printErrorLog(error)
                 completion(.failure(error))
                 
             } else if let error = error {
                 
                 let error = MBErrorKit.NetworkingError.underlyingError(error, response, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
+                self.printErrorLog(error)
                 completion(.failure(error))
                 
             } else if let httpResponse = response as? HTTPURLResponse,
@@ -44,12 +49,14 @@ extension Networkable {
                 
                 let error = MBErrorKit.NetworkingError.httpError(error, httpResponse, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
+                self.printErrorLog(error)
                 completion(.failure(error))
                 
             } else if let response = response, data == nil || data?.count == 0 {
-
+                
                 let error = MBErrorKit.NetworkingError.dataTaskError(response, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
+                self.printErrorLog(error)
                 completion(.failure(error))
                 
             } else if let data = data, data.count > 0 {
@@ -60,6 +67,7 @@ extension Networkable {
                 } catch let sError {
                     let error = MBErrorKit.NetworkingError.decodingError(sError, response, data)
                     MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(serializationError: error)
+                    self.printErrorLog(error)
                     completion(.failure(error))
                 }
                 
@@ -67,6 +75,7 @@ extension Networkable {
                 
                 let error = MBErrorKit.NetworkingError.unkownError(error, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
+                self.printErrorLog(error)
                 completion(.failure(error))
             }
         }

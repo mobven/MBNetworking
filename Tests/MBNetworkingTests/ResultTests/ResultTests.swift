@@ -7,6 +7,7 @@
 //
 
 import XCTest
+@testable import MobKitCore
 @testable import MBNetworking
 
 struct DecodableWrong: Decodable {
@@ -18,6 +19,10 @@ struct DecodableTrue: Decodable {
 }
 
 class ResultTests: XCTestCase {
+    
+    override func setUp() {
+        MobKit.isDeveloperModeOn = true
+    }
 
     func testDecodableWrong() {
         let expectation = XCTestExpectation(description: "Decodable Test")
