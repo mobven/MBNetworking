@@ -81,4 +81,4 @@ fastlane/README.md
 reports/
 firebase-debug.log
 
-# Each module has its own git
+xcframework

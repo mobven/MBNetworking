@@ -3,3 +3,6 @@ disabled_rules:
 excluded:
 - .build
 - Build
+- vendor
+- fastlane
+- xcframework
