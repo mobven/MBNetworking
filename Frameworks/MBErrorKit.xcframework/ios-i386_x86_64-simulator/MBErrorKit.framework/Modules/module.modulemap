@@ -1,0 +1,4 @@
+framework module MBErrorKit {
+  header "MBErrorKit-Swift.h"
+  requires objc
+}
