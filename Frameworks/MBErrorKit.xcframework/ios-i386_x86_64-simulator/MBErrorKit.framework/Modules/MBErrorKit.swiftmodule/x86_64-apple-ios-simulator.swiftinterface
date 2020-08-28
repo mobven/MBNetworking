@@ -1,0 +1,40 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)
+// swift-module-flags: -target x86_64-apple-ios10.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name MBErrorKit
+import Foundation
+import MobKitCore
+import Swift
+public enum NetworkingError : Swift.Error {
+  case networkConnectionError(Swift.Error?)
+  case encodingError(Swift.Error, Foundation.URLRequest)
+  case decodingError(Swift.Error, Foundation.URLResponse?, Foundation.Data?)
+  case httpError(Swift.Error?, Foundation.HTTPURLResponse, Foundation.Data?)
+  case dataTaskError(Foundation.URLResponse, Foundation.Data?)
+  case underlyingError(Swift.Error, Foundation.URLResponse?, Foundation.Data?)
+  case unkownError(Swift.Error?, Foundation.Data?)
+}
+extension NetworkingError {
+  public var errorTitle: Swift.String {
+    get
+  }
+  public var response: Foundation.URLResponse? {
+    get
+  }
+  public var data: Foundation.Data? {
+    get
+  }
+  public var errorDescription: Swift.String {
+    get
+  }
+}
+public protocol ErrorKitDelegate : AnyObject {
+  func errorKitDidCatch(networkingError: MBErrorKit.NetworkingError)
+  func errorKitDidCatch(serializationError: MBErrorKit.NetworkingError)
+  func errorKitDidCatch(cryptographyError: Swift.Error)
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class ErrorKit : MobKitCore.MobKitComponent {
+  override public class func shared() -> Self
+  override public func setup()
+  weak public var delegate: MBErrorKit.ErrorKitDelegate?
+  @objc deinit
+}

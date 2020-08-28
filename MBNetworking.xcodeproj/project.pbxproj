@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D7BE45224F7AEB8004A1C1B /* MBErrorKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D7BE45124F7AEB8004A1C1B /* MBErrorKit.xcframework */; };
+		6D7BE45624F7AEF2004A1C1B /* MobKitCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D7BE45524F7AEF2004A1C1B /* MobKitCore.xcframework */; };
 		6DA92B792484626500014DF0 /* MBNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DA92B6F2484626500014DF0 /* MBNetworking.framework */; };
 		6DCCBC3024AF72F70007177D /* Networkable+Pinning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCCBC2924AF72F70007177D /* Networkable+Pinning.swift */; };
 		6DCCBC3124AF72F70007177D /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCCBC2A24AF72F70007177D /* Session.swift */; };
@@ -17,7 +19,6 @@
 		6DCCBC3624AF72F70007177D /* Networkable+Logs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCCBC2F24AF72F70007177D /* Networkable+Logs.swift */; };
 		6DCCBC3A24AF73460007177D /* ResultTestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCCBC3824AF73460007177D /* ResultTestAPI.swift */; };
 		6DCCBC3B24AF73460007177D /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCCBC3924AF73460007177D /* ResultTests.swift */; };
-		6DE8942024F3A0CF0051DC7C /* MBErrorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6DE8941F24F3A0CF0051DC7C /* MBErrorKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +32,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6D7BE45124F7AEB8004A1C1B /* MBErrorKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MBErrorKit.xcframework; path = Frameworks/MBErrorKit.xcframework; sourceTree = "<group>"; };
+		6D7BE45524F7AEF2004A1C1B /* MobKitCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MobKitCore.xcframework; path = Frameworks/MobKitCore.xcframework; sourceTree = "<group>"; };
 		6DA92B6F2484626500014DF0 /* MBNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MBNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DA92B782484626500014DF0 /* MBNetworkingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MBNetworkingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DA92B7F2484626500014DF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -55,7 +58,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6DE8942024F3A0CF0051DC7C /* MBErrorKit in Frameworks */,
+				6D7BE45624F7AEF2004A1C1B /* MobKitCore.xcframework in Frameworks */,
+				6D7BE45224F7AEB8004A1C1B /* MBErrorKit.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +74,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6D7BE44B24F7AB3E004A1C1B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6D7BE45524F7AEF2004A1C1B /* MobKitCore.xcframework */,
+				6D7BE45124F7AEB8004A1C1B /* MBErrorKit.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6DA92B652484626500014DF0 = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +93,7 @@
 				6DA92B702484626500014DF0 /* Products */,
 				6DCCBC2724AF72F70007177D /* Sources */,
 				6DA92BA62484644C00014DF0 /* Tests */,
+				6D7BE44B24F7AB3E004A1C1B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -188,7 +202,6 @@
 			);
 			name = MBNetworking;
 			packageProductDependencies = (
-				6DE8941F24F3A0CF0051DC7C /* MBErrorKit */,
 			);
 			productName = Networking;
 			productReference = 6DA92B6F2484626500014DF0 /* MBNetworking.framework */;
@@ -241,7 +254,6 @@
 			);
 			mainGroup = 6DA92B652484626500014DF0;
 			packageReferences = (
-				6DE8941E24F3A0CF0051DC7C /* XCRemoteSwiftPackageReference "MBErrorKit" */,
 			);
 			productRefGroup = 6DA92B702484626500014DF0 /* Products */;
 			projectDirPath = "";
@@ -574,25 +586,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		6DE8941E24F3A0CF0051DC7C /* XCRemoteSwiftPackageReference "MBErrorKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mobven/MBErrorKit.git";
-			requirement = {
-				branch = develop;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		6DE8941F24F3A0CF0051DC7C /* MBErrorKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DE8941E24F3A0CF0051DC7C /* XCRemoteSwiftPackageReference "MBErrorKit" */;
-			productName = MBErrorKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6DA92B662484626500014DF0 /* Project object */;
 }
