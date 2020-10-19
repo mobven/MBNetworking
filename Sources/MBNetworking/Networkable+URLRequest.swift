@@ -69,7 +69,9 @@ extension Networkable {
     public func getRequest(url: URL,
                            formItems: [String: String] = [:],
                            headers: [String: String] = [:]) -> URLRequest {
-        let formData = formItems.map({ "\($0.key)=\($0.value)" }).joined(separator: "&")
+        let formData = formItems.map({
+            "\($0.key)=\($0.value.addingPercentEncoding(withAllowedCharacters: .nwURLQueryAllowed) ?? "")"
+        }).joined(separator: "&")
         var request = getRequest(with: url, httpMethod: .POST,
                                  headers: headers, contentType: .urlencoded)
         request.httpBody = formData.data(using: .utf8)

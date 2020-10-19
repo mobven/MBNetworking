@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import MobKitCore
+import MobKitCore
 @testable import MBNetworking
 
 struct DecodableWrong: Decodable {
