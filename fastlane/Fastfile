@@ -19,7 +19,8 @@ desc "Export xcframework"
 lane :export_xcframework do
   create_xcframework(
     project: 'MBNetworking.xcodeproj',
-    scheme: 'MBNetworking',
+    product_name: 'MBNetworking',
+    scheme: 'MBNetworking-Package',
     include_bitcode: true,
     destinations: ['iOS'],
     xcframework_output_directory: 'xcframework'
