@@ -13,19 +13,23 @@ import MBErrorKit
 extension Networkable {
     
     /**
-     Returns GET `URLRequest` with specified url and query item.
+     Returns GET or DELETE `URLRequest` with specified url and query item.
      
      - parameter url:         `URL`.
      - parameter queryItems:  Query items to be appended to the url,
      eg, pageSize: 10 will be appended to url as &pageSize=10.
      - parameter headers:     HTTP headers.
+     - parameter httpMethod:  HTTP method. (GET, DELETE)
      - returns: `URLRequest` with specified url and query item.
      */
-    public func getRequest(url: URL, queryItems: [String: String] = [:],
-                           headers: [String: String] = [:]) -> URLRequest {
+    public func getRequest(url: URL,
+                           queryItems: [String: String] = [:],
+                           headers: [String: String] = [:],
+                           httpMethod: RequestType = .GET) -> URLRequest {
+        //TODO: throw exception when an unexpected http method is encountered
         let url = url.adding(parameters: queryItems)
         var request = getRequest(with: url,
-                                 httpMethod: .GET,
+                                 httpMethod: httpMethod,
                                  headers: headers,
                                  contentType: .json)
         request.timeoutInterval = Session.shared.timeout.request
@@ -33,18 +37,23 @@ extension Networkable {
     }
     
     /**
-     Returns POST `URLRequest` with specified url and encodable body object.
+     Returns POST, PUT or DELETE `URLRequest` with specified url and encodable body object.
      
      - parameter url:         `URL`.
      - parameter encodable:   Any object confirming `Encodable` to be used in `URLRequest.httpBody`.
      - parameter headers:     HTTP headers.
+     - parameter httpMethod:  HTTP method. (DELETE, POST, PUT)
      - returns: `URLRequest` with specified url and encodable body object.
      */
     public func getRequest<T: Encodable>(url: URL,
                                          encodable data: T,
-                                         headers: [String: String] = [:]) -> URLRequest {
-        var request = getRequest(with: url, httpMethod: .POST,
-                                 headers: headers, contentType: .json)
+                                         headers: [String: String] = [:],
+                                         httpMethod: RequestType = .POST) -> URLRequest {
+        //TODO: throw exception when an unexpected http method is encountered
+        var request = getRequest(with: url,
+                                 httpMethod: httpMethod,
+                                 headers: headers,
+                                 contentType: .json)
         do {
             request.httpBody = try JSONEncoder().encode(data)
         } catch {
@@ -58,22 +67,26 @@ extension Networkable {
     }
     
     /**
-     Returns POST `URLRequest` with specified url and encodable body object.
+     Returns POST or PUT `URLRequest` with specified url and form item.
      
      - parameter url:         `URL`.
      - parameter formItems:   HashMap to be used in `URLRequest.httpBody`.
      - parameter headers:     HTTP headers.
-     - parameter contentType: Content-Type of the request.
-     - returns: `URLRequest` with specified url and encodable body object.
+     - parameter httpMethod:  HTTP method. (POST, PUT)
+     - returns: `URLRequest` with specified url and form item.
      */
     public func getRequest(url: URL,
                            formItems: [String: String] = [:],
-                           headers: [String: String] = [:]) -> URLRequest {
+                           headers: [String: String] = [:],
+                           httpMethod: RequestType = .POST) -> URLRequest {
+        //TODO: throw exception when an unexpected http method is encountered
         let formData = formItems.map({
             "\($0.key)=\($0.value.addingPercentEncoding(withAllowedCharacters: .nwURLQueryAllowed) ?? "")"
         }).joined(separator: "&")
-        var request = getRequest(with: url, httpMethod: .POST,
-                                 headers: headers, contentType: .urlencoded)
+        var request = getRequest(with: url,
+                                 httpMethod: httpMethod,
+                                 headers: headers,
+                                 contentType: .urlencoded)
         request.httpBody = formData.data(using: .utf8)
         request.timeoutInterval = Session.shared.timeout.request
         return request
@@ -118,11 +131,14 @@ public enum NetworkContentType: String {
 }
 
 /// Request types to be passed as `URLRequest.httpMethod`.
-enum RequestType: String {
+public enum RequestType: String {
     
     /// HTTP GET request
     case GET
     /// HTTP POST request
     case POST
-    
+    /// HTTP PUT request
+    case PUT
+    /// HTTP DELETE request
+    case DELETE
 }
