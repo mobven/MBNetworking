@@ -93,6 +93,47 @@ extension Networkable {
     }
     
     /**
+     Returns `URLRequest` for file upload
+     
+     - parameter url:         `URL`.
+     - parameter parameters:  Parameters to be added to multipart `URLRequest.httpBody`.
+     - parameter files:       Files to be added to multipart `URLRequest.httpBody`.
+     - parameter headers:     HTTP headers.
+     - returns: `URLRequest` with specified parameters.
+     */
+    public func uploadRequest(url: URL,
+                              parameters: [String: String] = [:], files: [File] = [],
+                              headers: [String: String] = [:]) -> URLRequest {
+        let body = NSMutableData()
+        let boundary = "Boundary-\(UUID().uuidString)"
+        let boundaryPrefix = "--\(boundary)\r\n"
+        
+        for (key, value) in parameters {
+            body.appendString(boundaryPrefix)
+            body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+            body.appendString("\(value)\r\n")
+        }
+        
+        for file in files {
+            body.appendString(boundaryPrefix)
+            body.appendString("Content-Disposition: form-data; name=\"image\"; filename=\"\(file.name)\"\r\n")
+            body.appendString("Content-Type: \(file.mimeType)\r\n\r\n")
+            body.append(file.data)
+            body.appendString("\r\n")
+        }
+        body.appendString("--".appending(boundary.appending("--")))
+        
+        let url = url
+        var request = getRequest(with: url,
+                                 httpMethod: .POST,
+                                 headers: headers,
+                                 contentType: .multipartFormData(boundary))
+        request.httpBody = body as Data
+        request.timeoutInterval = Session.shared.timeout.request
+        return request
+    }
+    
+    /**
      Returns `URLRequest` with specified url and httpMehthod.
      
      - parameter url:         `URL` of the request.
@@ -124,10 +165,19 @@ extension Networkable {
 }
 
 /// "Content-Type" values for network requests.
-public enum NetworkContentType: String {
+public enum NetworkContentType {
     /// Content type used when expecting response  in JSON format.
-    case json = "application/json"
-    case urlencoded = "application/x-www-form-urlencoded"
+    case json
+    case urlencoded
+    case multipartFormData(String)
+    
+    var rawValue: String {
+        switch self {
+        case .json: return "application/json"
+        case .urlencoded: return "application/x-www-form-urlencoded"
+        case .multipartFormData(let boundary): return "multipart/form-data; boundary=\(boundary)"
+        }
+    }
 }
 
 /// Request types to be passed as `URLRequest.httpMethod`.
