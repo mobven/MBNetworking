@@ -39,7 +39,19 @@ enum API {
             case .loginPost(let request):
                 return getRequest(url: API.getURL(endpoint: "LoginGET"),
                                   encodable: request)
-
+            }
+        }
+    }
+    
+    enum File: Networkable {
+        /// Multipart file upload request.
+        case upload(parameters: [String: String], files: [MBNetworking.File])
+        
+        var request: URLRequest {
+            switch self {
+            case .upload(let parameters, let files):
+                return uploadRequest(url: API.getURL(endpoint: "FileUpload"),
+                                     parameters: parameters, files: files)
             }
         }
     }
