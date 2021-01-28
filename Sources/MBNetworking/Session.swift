@@ -29,6 +29,15 @@ class Session {
             (delegate as? URLSessionPinningDelegate)?.certificatePaths = certificatePaths
         }
     }
+
+    /// Configures networking to trust session authentication challenge, even if the certificate is not trusted.
+    func setServerTrustedURLAuthenticationChallenge() {
+        let configuration = URLSession.shared.configuration
+        self.delegate = UntrustedURLSessionDelegate()
+        session = URLSession(configuration: configuration,
+                             delegate: delegate,
+                             delegateQueue: nil)
+    }
     
     required init() {
         let configuration = URLSession.shared.configuration

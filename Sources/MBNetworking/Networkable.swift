@@ -31,5 +31,11 @@ public enum NetworkableConfigs {
     public func setTimeout(for request: TimeInterval, resource: TimeInterval) {
         Session.shared.timeout = Session.TimeOut(request: request, resource: resource)
     }
+
+    /// Configures networking to trust session authentication challenge, even if the certificate is not trusted.
+    /// **Apple may reject your application, for this usage. It's on your own responsibility**
+    public func setServerTrustedURLAuthenticationChallenge() {
+        Session.shared.setServerTrustedURLAuthenticationChallenge()
+    }
     
 }

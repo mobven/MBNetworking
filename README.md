@@ -105,3 +105,10 @@ if let path = Bundle.main.path(forResource: "certificate", ofType: "der") {
     NetworkableConfigs.default.setCertificatePaths(path)
 }
 ```
+
+### Enable server-trusted authentication.
+`Networking` can be configured to continue with any challenge, in case your server has no publicly trusted certifiace.
+**Apple may reject your application, for this usage. It's on your own responsibility**
+```swift
+NetworkableConfigs.default.setServerTrustedURLAuthenticationChallenge()
+```
