@@ -4,9 +4,9 @@ Networking is a design-pattern framework based on Apple's `URLSession`. It's evo
 
 ## Requirements
 
-- iOS 9.0+
-- Xcode 11.3+
-- Swift 5+
+- iOS 10.0+
+- Xcode 12+
+- Swift 5.3+
 
 ## Installation
 
