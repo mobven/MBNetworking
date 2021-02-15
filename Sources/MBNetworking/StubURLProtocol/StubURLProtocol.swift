@@ -19,6 +19,10 @@ public final class StubURLProtocol: URLProtocol {
         return result != nil
     }
 
+}
+
+extension StubURLProtocol {
+
     public override class func canInit(with request: URLRequest) -> Bool {
         return isEnabled
     }
@@ -53,35 +57,6 @@ public final class StubURLProtocol: URLProtocol {
 
     public override func stopLoading() {
         // Nothing to handle
-    }
-
-}
-
-extension StubURLProtocol {
-
-    public enum Result {
-
-        /// Successfull result with specified data
-        case success(Data)
-        /// Failure with the specified Error.
-        /// The  actual result will from `Networkable.fetch` will be `NetworkingError.underlyingError`.
-        case failure(Error)
-        /// Failure with the specified status code.
-        /// The  actual result will from `Networkable.fetch` will be `NetworkingError.httpError`.
-        case failureStatusCode(Int)
-
-    }
-
-}
-
-extension StubURLProtocol.Result {
-
-    static func getData(from path: URL?) -> Self {
-        guard let filePath = path,
-              let data = try? Data(contentsOf: filePath) else {
-            fatalError("Could not load data from specified path: \(path?.absoluteString ?? "")")
-        }
-        return .success(data)
     }
 
 }
