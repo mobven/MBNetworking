@@ -17,7 +17,7 @@ class NetworkingTests: XCTestCase {
     }
 
     func testDataDownload() {
-        let expectation = XCTestExpectation()
+        StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "imageDownload", withExtension: "jpg"))
         var image: UIImage?
         Download.image(
             url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
@@ -25,10 +25,21 @@ class NetworkingTests: XCTestCase {
             if case let .success(data) = result {
                 image = UIImage(data: data)
             }
-            expectation.fulfill()
         }
-        XCTWaiter().wait(for: [expectation], timeout: 5)
         XCTAssertNotNil(image)
+    }
+
+    func testURLProtocols() {
+        StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
+        var string: String?
+        Download.image(
+            url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
+        ).fetch(Data.self) { result in
+            if case let .success(data) = result {
+                string = String(data: data, encoding: .utf8)
+            }
+        }
+        XCTAssertEqual(string, "some\n")
     }
     
 }
