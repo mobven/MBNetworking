@@ -7,27 +7,41 @@
 //
 
 import XCTest
+@testable import MobKitCore
+@testable import MBNetworking
 
 class NetworkingTests: XCTestCase {
     
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        MobKit.isDeveloperModeOn = true
+    }
+
+    func testDataDownload() {
+        let expectation = XCTestExpectation()
+        var image: UIImage?
+        Download.image(
+            url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
+        ).fetch(Data.self) { result in
+            if case let .success(data) = result {
+                image = UIImage(data: data)
+            }
+            expectation.fulfill()
+        }
+        XCTWaiter().wait(for: [expectation], timeout: 5)
+        XCTAssertNotNil(image)
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+}
+
+enum Download: Networkable {
+
+    case image(url: URL)
+
+    var request: URLRequest {
+        switch self {
+        case let .image(url):
+            return getRequest(url: url, queryItems: [:])
         }
     }
-    
+
 }

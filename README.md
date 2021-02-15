@@ -33,25 +33,12 @@ enum API {
         
         var request: URLRequest {
             switch self {
-            case .loginGet(let username, let password):
+            case let .loginGet(username, password):
                 return getRequest(url: API.getURL(endpoint: "LoginPOST"),
                                   queryItems: ["username": username, "password": password])
-            case .loginPost(let request):
+            case let .loginPost(request):
                 return getRequest(url: API.getURL(endpoint: "LoginGET"),
                                   encodable: request)
-            }
-        }
-    }
-    
-    enum File: Networkable {
-        /// Multipart file upload request.
-        case upload(parameters: [String: String], files: [MBNetworking.File])
-        
-        var request: URLRequest {
-            switch self {
-            case .upload(let parameters, let files):
-                return uploadRequest(url: API.getURL(endpoint: "FileUpload"),
-                                     parameters: parameters, files: files)
             }
         }
     }
@@ -71,17 +58,17 @@ struct LoginRequest: Encodable {
 ```swift
 API.Login.loginGet(username: "admin", password: "admin").fetch(LoginResponse.self) { result in
     switch result {
-    case .success(let response):
+    case let .success(response):
         print("Succeeded with \(response)")
-    case .failure(let error):
+    case let .failure(error):
         print("Failed with \(error)")
     }
 }
 API.Login.loginPost(request: LoginRequest(username: "admin", password: "admin")).fetch(LoginResponse.self) { result in
     switch result {
-    case .success(let response):
+    case let .success(response):
         print("Succeeded with \(response)")
-    case .failure(let error):
+    case let .failure(error):
         print("Failed with \(error)")
     }
 }
@@ -111,4 +98,40 @@ if let path = Bundle.main.path(forResource: "certificate", ofType: "der") {
 **Apple may reject your application, for this usage. It's on your own responsibility**
 ```swift
 NetworkableConfigs.default.setServerTrustedURLAuthenticationChallenge()
+```
+
+### File Upload
+`Networking` supports file upload through `uploadRequest` using `MBNetworking.File`s.
+```swift
+extension API {
+    enum File: Networkable {
+        /// Multipart file upload request.
+        case upload(parameters: [String: String], files: [MBNetworking.File])
+        
+        var request: URLRequest {
+            switch self {
+            case let .upload(parameters, files):
+                return uploadRequest(url: API.getURL(endpoint: "FileUpload"),
+                                     parameters: parameters, files: files)
+            }
+        }
+    }
+}
+```
+
+### Data Download
+You can use `Data` type as decodable to download Data from service. This can be helpful for downloading image, html data.
+```swift
+extension API {
+    enum Download: Networkable {
+        case image(url: URL)
+        
+        var request: URLRequest {
+            switch self {
+            case let .image(url):
+                return getRequest(url: url, queryItems: [:])
+            }
+        }
+    }
+}
 ```
