@@ -9,10 +9,11 @@
 import Foundation
 import MBErrorKit
 
-/// URLProtocol for simplifying Networking tests.
+/// URLProtocol for simplifying unit tests by acting man-in-the-middle on for the session.
+/// It's configured to work only with test targets. It won't work if there's no test process in progress.
 public final class StubURLProtocol: URLProtocol {
 
-    /// Result of the request is going to happen.
+    /// Result of the request, which is going to happen.
     public static var result: Result?
 
     static var isEnabled: Bool {

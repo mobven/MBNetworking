@@ -48,7 +48,7 @@ class Session {
     
     required init() {
         let configuration = URLSession.shared.configuration
-        if StubURLProtocol.isEnabled {
+        if StubURLProtocol.isEnabled && ProcessInfo.isUnderTest {
             URLProtocol.registerClass(StubURLProtocol.self)
             configuration.protocolClasses = [StubURLProtocol.self]
         }

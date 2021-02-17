@@ -23,7 +23,7 @@ extension Networkable {
     ) {
         self.fetch(request, completion: completion)
         // StubURLProtocol enabled and adding a small delay.
-        if StubURLProtocol.isEnabled && ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
+        if StubURLProtocol.isEnabled && ProcessInfo.isUnderTest {
             XCTWaiter().wait(for: [XCTestExpectation()], timeout: 0.005)
         }
     }

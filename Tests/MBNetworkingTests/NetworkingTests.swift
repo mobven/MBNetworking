@@ -19,7 +19,7 @@ class NetworkingTests: XCTestCase {
     func testDataDownload() {
         StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "imageDownload", withExtension: "jpg"))
         var image: UIImage?
-        Download.image(
+        Download.data(
             url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
         ).fetch(Data.self) { result in
             if case let .success(data) = result {
@@ -28,29 +28,16 @@ class NetworkingTests: XCTestCase {
         }
         XCTAssertNotNil(image)
     }
-
-    func testURLProtocols() {
-        StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
-        var string: String?
-        Download.image(
-            url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
-        ).fetch(Data.self) { result in
-            if case let .success(data) = result {
-                string = String(data: data, encoding: .utf8)
-            }
-        }
-        XCTAssertEqual(string, "some\n")
-    }
     
 }
 
 enum Download: Networkable {
 
-    case image(url: URL)
+    case data(url: URL)
 
     var request: URLRequest {
         switch self {
-        case let .image(url):
+        case let .data(url):
             return getRequest(url: url, queryItems: [:])
         }
     }
