@@ -135,3 +135,19 @@ extension API {
     }
 }
 ```
+
+### Unit Testing
+Networking provides `StubURLProtocol` which acts like man-in-the-middle to simplify stub data for unit testing. You can achieve this by setting `StubURLProtocol.result` to a any of the available values which are:
+* success(Data): Successfull result with specified data
+* failure(Error): Failure with the specified Error.
+* case failureStatusCode(Int): Failure with the specified status code.
+
+There're also some helper functions to get the `StubURLProtocol.Result` with the data from specifed bundle resource. 
+```swift
+StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
+StubURLProtocol.result = .getData(from: Bundle.module.path(forResource: "some", ofType: "txt"))
+```
+
+StubURLProtocol is designed for **unit tests only** and would not work if there's no any unit testing process in progress.
+
+You need to not set `StubURLProtocol.result` before each `Networkable.fetch` call.

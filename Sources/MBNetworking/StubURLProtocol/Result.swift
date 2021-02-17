@@ -26,7 +26,7 @@ extension StubURLProtocol {
 
 }
 
-extension StubURLProtocol.Result {
+public extension StubURLProtocol.Result {
 
     /// Prepares `StubURLProtocol.Result.success(Data)` from specified Bundle path.
     /// - Parameter url: Bundle URL for the specifed resource. Can be received from `url(forResource:,ofType:)`.
