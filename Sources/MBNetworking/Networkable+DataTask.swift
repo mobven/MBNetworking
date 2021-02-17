@@ -8,7 +8,6 @@
 
 import Foundation
 import MBErrorKit
-import XCTest
 
 /// Networkable extension related to data tasks.
 extension Networkable {
@@ -24,7 +23,7 @@ extension Networkable {
         self.fetch(request, completion: completion)
         // StubURLProtocol enabled and adding a small delay.
         if StubURLProtocol.isEnabled && ProcessInfo.isUnderTest {
-            XCTWaiter().wait(for: [XCTestExpectation()], timeout: 0.005)
+            RunLoop.current.run(until: Date().addingTimeInterval(0.005))
         }
     }
     
