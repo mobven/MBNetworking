@@ -62,6 +62,11 @@ extension Networkable {
             } else if let data = data, data.count > 0 {
                 
                 do {
+                    // If requested decodable type is Data, received data will be returned.
+                    if V.Type.self == Data.Type.self {
+                        completion(.success(data as! V))
+                        return
+                    }
                     let decodableData = try JSONDecoder().decode(V.self, from: data)
                     completion(.success(decodableData))
                 } catch let sError {
