@@ -22,13 +22,8 @@ extension Networkable {
     ) {
         // StubURLProtocol enabled and adding a small delay.
         if StubURLProtocol.isEnabled && ProcessInfo.isUnderTest {
-            let group = DispatchGroup()
-            group.enter()
-            self.fetch(request) { (result: Result<V, MBErrorKit.NetworkingError>) in
-                completion(result)
-                group.leave()
-            }
-            group.wait()
+            self.fetch(request, completion: completion)
+            RunLoop.current.run(until: Date().addingTimeInterval(0.01))
         } else {
             self.fetch(request, completion: completion)
         }
@@ -113,7 +108,9 @@ extension Networkable {
         let task = Session.shared.session
             .dataTask(with: urlRequest, completionHandler: { (data, response, error) in
                 self.printResponse(data)
-                completion(response, data, error)
+                DispatchQueue.main.async {
+                    completion(response, data, error)
+                }
             })
         task.resume()
     }
