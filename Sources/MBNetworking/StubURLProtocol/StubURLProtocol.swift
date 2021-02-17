@@ -14,7 +14,17 @@ import MBErrorKit
 public final class StubURLProtocol: URLProtocol {
 
     /// Result of the request, which is going to happen.
-    public static var result: Result?
+    public static var result: Result? {
+        didSet {
+            if result == nil {
+                Session.shared.setStubProtocolEnabled(false)
+            } else {
+                if ProcessInfo.isUnderTest {
+                    Session.shared.setStubProtocolEnabled(true)
+                }
+            }
+        }
+    }
 
     static var isEnabled: Bool {
         return result != nil

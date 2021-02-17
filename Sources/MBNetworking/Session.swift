@@ -48,13 +48,23 @@ class Session {
     
     required init() {
         let configuration = URLSession.shared.configuration
-        if StubURLProtocol.isEnabled && ProcessInfo.isUnderTest {
-            URLProtocol.registerClass(StubURLProtocol.self)
-            configuration.protocolClasses = [StubURLProtocol.self]
-        }
         timeout = TimeOut(request: 60, resource: 60)
         delegate = URLSessionPinningDelegate()
-        self.session = URLSession(configuration: configuration,
+        session = URLSession(configuration: configuration,
+                                  delegate: delegate,
+                                  delegateQueue: nil)
+    }
+
+    func setStubProtocolEnabled(_ isEnabled: Bool) {
+        let configuration = session.configuration
+        if isEnabled {
+            URLProtocol.registerClass(StubURLProtocol.self)
+            configuration.protocolClasses = [StubURLProtocol.self]
+        } else {
+            URLProtocol.unregisterClass(StubURLProtocol.self)
+            configuration.protocolClasses = nil
+        }
+        session = URLSession(configuration: configuration,
                                   delegate: delegate,
                                   delegateQueue: nil)
     }
