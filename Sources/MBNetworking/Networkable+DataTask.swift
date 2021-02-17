@@ -23,7 +23,7 @@ extension Networkable {
         // StubURLProtocol enabled and adding a small delay.
         if StubURLProtocol.isEnabled && ProcessInfo.isUnderTest {
             self.fetch(request, completion: completion)
-            RunLoop.current.run(until: Date().addingTimeInterval(0.01))
+            RunLoop.current.run(until: Date().addingTimeInterval(0.05))
         } else {
             self.fetch(request, completion: completion)
         }
