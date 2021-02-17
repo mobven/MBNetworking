@@ -150,4 +150,4 @@ StubURLProtocol.result = .getData(from: Bundle.module.path(forResource: "some", 
 
 StubURLProtocol is designed for **unit tests only** and would not work if there's no any unit testing process in progress.
 
-You need to not set `StubURLProtocol.result` before each `Networkable.fetch` call.
+You need to set `StubURLProtocol.result` before each `Networkable.fetch` call to achieve necessary result.
