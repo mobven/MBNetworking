@@ -20,12 +20,23 @@ extension Networkable {
         _ type: V.Type,
         completion: @escaping ((Result<V, MBErrorKit.NetworkingError>) -> Void)
     ) {
-        // StubURLProtocol enabled and adding a small delay.
+        // StubURLProtocol enabled, adding waiter through dispatch group.
         if StubURLProtocol.isEnabled && ProcessInfo.isUnderTest {
-            self.fetch(request, completion: completion)
-            RunLoop.current.run(until: Date().addingTimeInterval(0.05))
+            let group = DispatchGroup()
+            group.enter()
+            DispatchQueue.global(qos: .default).async {
+                self.fetch(request) { (result: Result<V, MBErrorKit.NetworkingError>) in
+                    completion(result)
+                    group.leave()
+                }
+            }
+            group.wait()
         } else {
-            self.fetch(request, completion: completion)
+            self.fetch(request) { (result: Result<V, MBErrorKit.NetworkingError>) in
+                DispatchQueue.main.async {
+                    completion(result)
+                }
+            }
         }
     }
     
@@ -108,9 +119,7 @@ extension Networkable {
         let task = Session.shared.session
             .dataTask(with: urlRequest, completionHandler: { (data, response, error) in
                 self.printResponse(data)
-                DispatchQueue.main.async {
-                    completion(response, data, error)
-                }
+                completion(response, data, error)
             })
         task.resume()
     }
