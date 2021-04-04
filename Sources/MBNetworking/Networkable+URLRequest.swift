@@ -116,7 +116,7 @@ extension Networkable {
         
         for file in files {
             body.appendString(boundaryPrefix)
-            body.appendString("Content-Disposition: form-data; name=\"image\"; filename=\"\(file.name)\"\r\n")
+            body.appendString("Content-Disposition: form-data; name=\"\(file.name)\"; filename=\"\(file.fileNameWithExtension)\"\r\n")
             body.appendString("Content-Type: \(file.mimeType)\r\n\r\n")
             body.append(file.data)
             body.appendString("\r\n")
