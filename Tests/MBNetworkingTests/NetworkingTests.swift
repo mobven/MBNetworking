@@ -17,17 +17,15 @@ class NetworkingTests: XCTestCase {
     }
 
     func testDataDownload() {
-        let expectation = XCTestExpectation()
+        StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "imageDownload", withExtension: "jpg"))
         var image: UIImage?
-        Download.image(
+        Download.data(
             url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
         ).fetch(Data.self) { result in
             if case let .success(data) = result {
                 image = UIImage(data: data)
             }
-            expectation.fulfill()
         }
-        XCTWaiter().wait(for: [expectation], timeout: 5)
         XCTAssertNotNil(image)
     }
     
@@ -35,11 +33,11 @@ class NetworkingTests: XCTestCase {
 
 enum Download: Networkable {
 
-    case image(url: URL)
+    case data(url: URL)
 
     var request: URLRequest {
         switch self {
-        case let .image(url):
+        case let .data(url):
             return getRequest(url: url, queryItems: [:])
         }
     }

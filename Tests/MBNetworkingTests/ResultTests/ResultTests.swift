@@ -9,6 +9,7 @@
 import XCTest
 import MobKitCore
 @testable import MBNetworking
+@testable import MBErrorKit
 
 struct DecodableWrong: Decodable {
     var resultCount: String?
@@ -25,8 +26,7 @@ class ResultTests: XCTestCase {
     }
 
     func testDecodableWrong() {
-        let expectation = XCTestExpectation(description: "Decodable Test")
-        
+        StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "results", withExtension: "json"))
         ResultTestAPI.fetch.fetch(DecodableWrong.self) { result in
             switch result {
             case .success:
@@ -34,16 +34,11 @@ class ResultTests: XCTestCase {
             case .failure(let error):
                 XCTAssertTrue(error.errorTitle == "Decoding Error")
             }
-            
-            expectation.fulfill()
         }
-
-        _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
     }
     
     func testDecodableTrue() {
-        let expectation = XCTestExpectation(description: "Decodable Test")
-        
+        StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "results", withExtension: "json"))
         ResultTestAPI.fetch.fetch(DecodableTrue.self) { result in
             switch result {
             case .success(let response):
@@ -51,16 +46,11 @@ class ResultTests: XCTestCase {
             case .failure:
                 XCTFail("Result should succeed.")
             }
-            
-            expectation.fulfill()
         }
-        
-        _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
     }
     
     func testUnderlyingError() {
-        let expectation = XCTestExpectation(description: "Underlying Test")
-        
+        StubURLProtocol.result = .failure(NSError(domain: "", code: -2, userInfo: nil))
         ResultTestAPI.underlyingError.fetch(DecodableTrue.self) { result in
             switch result {
             case .success:
@@ -68,16 +58,11 @@ class ResultTests: XCTestCase {
             case .failure(let error):
                 XCTAssertTrue(error.errorTitle == "Underlying Error")
             }
-            
-            expectation.fulfill()
         }
-        
-        _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
     }
     
     func testHTTPError() {
-        let expectation = XCTestExpectation(description: "HTTP Test")
-        
+        StubURLProtocol.result = .failureStatusCode(500)
         ResultTestAPI.httpError.fetch(DecodableTrue.self) { result in
             switch result {
             case .success:
@@ -85,30 +70,19 @@ class ResultTests: XCTestCase {
             case .failure(let error):
                 XCTAssertTrue(error.errorTitle == "HTTP Error")
             }
-            
-            expectation.fulfill()
         }
-        
-        _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
     }
 
     func testNetworkError() {
-        // Must be test on connection off
-        return
-        let expectation = XCTestExpectation(description: "Network Test")
-        
+        StubURLProtocol.result = .failure(NSError(domain: "", code: NSURLErrorNotConnectedToInternet, userInfo: nil))
         ResultTestAPI.fetch.fetch(DecodableTrue.self) { result in
             switch result {
             case .success:
                 XCTFail("Result should fail.")
             case .failure(let error):
-                XCTAssertTrue(error.errorTitle == "Network Error")
+                XCTAssertTrue(error.errorTitle == "Network Connection Error")
             }
-
-            expectation.fulfill()
         }
-
-        _ = XCTWaiter.wait(for: [expectation], timeout: 10.0)
     }
     
 }

@@ -9,8 +9,15 @@
 import Foundation
 
 class Session {
-    
-    static let shared = Session()
+
+    static var instance: Session?
+    static var shared: Session {
+        guard let instance = instance else {
+            self.instance = Session()
+            return self.instance!
+        }
+        return instance
+    }
     
     var session: URLSession
     var delegate: URLSessionDelegate
@@ -43,11 +50,25 @@ class Session {
         let configuration = URLSession.shared.configuration
         timeout = TimeOut(request: 60, resource: 60)
         delegate = URLSessionPinningDelegate()
-        self.session = URLSession(configuration: configuration,
+        session = URLSession(configuration: configuration,
                                   delegate: delegate,
                                   delegateQueue: nil)
     }
-    
+
+    func setStubProtocolEnabled(_ isEnabled: Bool) {
+        let configuration = session.configuration
+        if isEnabled {
+            URLProtocol.registerClass(StubURLProtocol.self)
+            configuration.protocolClasses = [StubURLProtocol.self]
+        } else {
+            URLProtocol.unregisterClass(StubURLProtocol.self)
+            configuration.protocolClasses = nil
+        }
+        session = URLSession(configuration: configuration,
+                                  delegate: delegate,
+                                  delegateQueue: nil)
+    }
+
     /// `URLSessionConfiguration` timeout.
     struct TimeOut {
         /// The timeout interval to use when waiting for additional data.

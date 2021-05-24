@@ -4,9 +4,9 @@ Networking is a design-pattern framework based on Apple's `URLSession`. It's evo
 
 ## Requirements
 
-- iOS 9.0+
-- Xcode 11.3+
-- Swift 5+
+- iOS 10.0+
+- Xcode 12+
+- Swift 5.3+
 
 ## Installation
 
@@ -135,3 +135,24 @@ extension API {
     }
 }
 ```
+
+### Unit Testing
+Networking provides `StubURLProtocol` which acts like man-in-the-middle to simplify stub data for unit testing. You can achieve this by setting `StubURLProtocol.result` to a any of the available values which are:
+* success(Data): Successfull result with specified data
+* failure(Error): Failure with the specified Error.
+* case failureStatusCode(Int): Failure with the specified status code.
+
+There're helper functions to get the `StubURLProtocol.Result` with the data from specified bundle resource. 
+```swift
+StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
+StubURLProtocol.result = .getData(from: Bundle.module.path(forResource: "some", ofType: "txt"))
+```
+
+You can define a delay in seconds for reading stub data:
+```swift
+StubURLProtocol.delay = 3
+```
+
+StubURLProtocol is designed for **unit tests only** and would not work if there's no any unit testing process in progress.
+
+You need to set `StubURLProtocol.result` before each `Networkable.fetch` call to achieve necessary result.
