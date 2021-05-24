@@ -20,7 +20,13 @@ extension Networkable {
         _ type: V.Type,
         completion: @escaping ((Result<V, MBErrorKit.NetworkingError>) -> Void)
     ) {
-        self.fetch(request, completion: completion)
+        // StubURLProtocol enabled and adding a small delay.
+        if StubURLProtocol.isEnabled && ProcessInfo.isUnderTest {
+            self.fetch(request, completion: completion)
+            RunLoop.current.run(until: Date().addingTimeInterval(0.05))
+        } else {
+            self.fetch(request, completion: completion)
+        }
     }
     
     private func fetch<V: Decodable>(
@@ -30,7 +36,7 @@ extension Networkable {
         requestData(urlRequest) { (response, data, error) in
             
             if let error = error,
-                self.isNetworkConnectionError((error as NSError).code) {
+               self.isNetworkConnectionError((error as NSError).code) {
                 
                 let error = MBErrorKit.NetworkingError.networkConnectionError(error)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
@@ -45,7 +51,7 @@ extension Networkable {
                 completion(.failure(error))
                 
             } else if let httpResponse = response as? HTTPURLResponse,
-                self.isSuccess(httpResponse.statusCode) {
+                      self.isSuccess(httpResponse.statusCode) {
                 
                 let error = MBErrorKit.NetworkingError.httpError(error, httpResponse, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
