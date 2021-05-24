@@ -26,6 +26,9 @@ public final class StubURLProtocol: URLProtocol {
         }
     }
 
+    /// Delay for the response for the current request.
+    public static var delay: TimeInterval = 0
+
     static var isEnabled: Bool {
         return result != nil
     }
@@ -47,23 +50,26 @@ extension StubURLProtocol {
     }
 
     public override func startLoading() {
-        guard let result = StubURLProtocol.result else {
-            client?.urlProtocolDidFinishLoading(self)
-            return
-        }
-
-        switch result {
-        case let .success(data):
-            client?.urlProtocol(self, didLoad: data)
-        case let .failure(error):
-            client?.urlProtocol(self, didFailWithError: error)
-        case let .failureStatusCode(statusCode):
-            if let url = request.url,
-               let response = HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: nil) {
-                client?.urlProtocol(self, cachedResponseIsValid: CachedURLResponse(response: response, data: Data()))
+        Timer.scheduledTimer(withTimeInterval: StubURLProtocol.delay, repeats: false) { [weak self] _ in
+            guard let self = self else { return }
+            guard let result = StubURLProtocol.result else {
+                self.client?.urlProtocolDidFinishLoading(self)
+                return
             }
+
+            switch result {
+            case let .success(data):
+                self.client?.urlProtocol(self, didLoad: data)
+            case let .failure(error):
+                self.client?.urlProtocol(self, didFailWithError: error)
+            case let .failureStatusCode(statusCode):
+                if let url = self.request.url,
+                   let response = HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: nil) {
+                    self.client?.urlProtocol(self, cachedResponseIsValid: CachedURLResponse(response: response, data: Data()))
+                }
+            }
+            self.client?.urlProtocolDidFinishLoading(self)
         }
-        client?.urlProtocolDidFinishLoading(self)
     }
 
     public override func stopLoading() {

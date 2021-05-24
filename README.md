@@ -148,6 +148,11 @@ StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "some", w
 StubURLProtocol.result = .getData(from: Bundle.module.path(forResource: "some", ofType: "txt"))
 ```
 
+You can define a delay for reading stub data in seconds:
+```swift
+StubURLProtocol.delay = 3
+```
+
 StubURLProtocol is designed for **unit tests only** and would not work if there's no any unit testing process in progress.
 
 You need to set `StubURLProtocol.result` before each `Networkable.fetch` call to achieve necessary result.
