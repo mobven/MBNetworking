@@ -142,13 +142,13 @@ Networking provides `StubURLProtocol` which acts like man-in-the-middle to simpl
 * failure(Error): Failure with the specified Error.
 * case failureStatusCode(Int): Failure with the specified status code.
 
-There're also some helper functions to get the `StubURLProtocol.Result` with the data from specifed bundle resource. 
+There're helper functions to get the `StubURLProtocol.Result` with the data from specified bundle resource. 
 ```swift
 StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
 StubURLProtocol.result = .getData(from: Bundle.module.path(forResource: "some", ofType: "txt"))
 ```
 
-You can define a delay for reading stub data in seconds:
+You can define a delay in seconds for reading stub data:
 ```swift
 StubURLProtocol.delay = 3
 ```
