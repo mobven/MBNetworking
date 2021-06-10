@@ -13,6 +13,7 @@ import MBErrorKit
 extension Networkable {
     
     /// Fetch data with specified parameters and return back with the completion.
+    /// discussion.
     /// - Parameters:
     ///   - type: Type of the result.
     ///   - completion: Completion block to return response as `Result`
