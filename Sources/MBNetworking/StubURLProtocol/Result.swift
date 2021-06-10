@@ -13,7 +13,6 @@ extension StubURLProtocol {
     public enum Result {
 
         /// Successfull result with specified data
-        /// blah blah.
         /// You can use `StubURLProtocol.Result.getData()` to read mock data from bundle, easily and inline.
         case success(Data)
         /// Failure with the specified Error.
