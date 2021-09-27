@@ -104,7 +104,6 @@ extension Networkable {
     }
     
     private func requestData(_ urlRequest: URLRequest, completion: @escaping ((URLResponse?, Data?, Error?) -> Void)) {
-        printRequest(urlRequest.url?.absoluteString ?? "", urlRequest.allHTTPHeaderFields, urlRequest.httpBody)
         let task = Session.shared.session
             .dataTask(with: urlRequest, completionHandler: { (data, response, error) in
                 self.printResponse(data)
