@@ -12,24 +12,14 @@ import MobKitCore
 /// Networkable extension related to data tasks.
 extension Networkable {
     
-    func printRequest(_ url: String, _ headers: [String: String]?, _ data: Data?) {
+   func printResponse(_ data: Data?) {
         if MobKit.isDeveloperModeOn {
             print("\n")
-            print("<-------- MBNetworking Request -------->")
-            print("Endpoint: \(url)")
-            print("Headers: \(headers ?? [:])")
+            print("<-------- MBNetworking -------->")
+            printRequestLog()
+            print("Response Body:")
             printData(data)
-            print("<-------- MBNetworking Request -------->")
-            print("\n")
-        }
-    }
-    
-    func printResponse(_ data: Data?) {
-        if MobKit.isDeveloperModeOn {
-            print("\n")
-            print("<-------- MBNetworking Response -------->")
-            printData(data)
-            print("<-------- MBNetworking Response -------->")
+            print("<-------- MBNetworking -------->")
             print("\n")
         }
     }
@@ -38,8 +28,19 @@ extension Networkable {
         if MobKit.isDeveloperModeOn {
             print("\n")
             print("<-------- MBNetworking Error -------->")
-            print(error?.localizedDescription ?? "")
+            printRequestLog()
+            print("Response Error: " + (error?.localizedDescription ?? ""))
             print("<-------- MBNetworking Error -------->")
+            print("\n")
+        }
+    }
+    
+    private func printRequestLog() {
+        print("Endpoint: \(request.url?.absoluteString ?? "")")
+        print("Headers: \(request.allHTTPHeaderFields ?? [:])")
+        if let body = request.httpBody {
+            print("Request Body:")
+            printData(body)
             print("\n")
         }
     }
