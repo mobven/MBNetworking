@@ -7,12 +7,12 @@
 //
 
 import Foundation
+import MBErrorKit
 import MobKitCore
 
 /// Networkable extension related to data tasks.
 extension Networkable {
-    
-   func printResponse(_ data: Data?) {
+    func printResponse(_ data: Data?) {
         if MobKit.isDeveloperModeOn {
             print("\n")
             print("<-------- MBNetworking -------->")
@@ -23,7 +23,7 @@ extension Networkable {
             print("\n")
         }
     }
-    
+
     func printErrorLog(_ error: Error?) {
         if MobKit.isDeveloperModeOn {
             print("\n")
@@ -34,7 +34,18 @@ extension Networkable {
             print("\n")
         }
     }
-    
+
+    func printErrorLog(_ error: NetworkingError?) {
+        if MobKit.isDeveloperModeOn {
+            print("\n")
+            print("<-------- MBNetworking Error -------->")
+            printRequestLog()
+            print("Response Error: " + (error?.errorDescription ?? ""))
+            print("<-------- MBNetworking Error -------->")
+            print("\n")
+        }
+    }
+
     private func printRequestLog() {
         print("Endpoint: \(request.url?.absoluteString ?? "")")
         print("Headers: \(request.allHTTPHeaderFields ?? [:])")
@@ -44,17 +55,16 @@ extension Networkable {
             print("\n")
         }
     }
-    
+
     private func printData(_ data: Data?) {
         if let data = data {
             if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
-                let json = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
-                let string = String(data: json, encoding: .utf8) {
+               let json = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
+               let string = String(data: json, encoding: .utf8) {
                 print(string)
             } else if let string = String(data: data, encoding: .utf8) {
                 print(string)
             }
         }
     }
-    
 }
