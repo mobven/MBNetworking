@@ -20,7 +20,7 @@ class NetworkableTasksTests: XCTestCase {
     }
 
     override func tearDown() {
-        Session.shared.tasksInProgress.removeAll()
+        NetworkableTasks.cancellAll()
     }
 
     func testSessionQueueHasDataTask_WhenFetchCalled() {
@@ -39,7 +39,7 @@ class NetworkableTasksTests: XCTestCase {
         let expectation = XCTestExpectation(description: "waiting for image")
         makeACall(expectation)
         XCTAssertEqual(Session.shared.tasksInProgress.count, 1)
-        wait(for: [expectation], timeout: 0.35)
+        wait(for: [expectation], timeout: 1)
         XCTAssertTrue(Session.shared.tasksInProgress.isEmpty)
     }
 
@@ -49,31 +49,34 @@ class NetworkableTasksTests: XCTestCase {
             makeACall(index == 3 ? expectation : nil)
         }
         XCTAssertEqual(Session.shared.tasksInProgress.count, 4)
-        wait(for: [expectation], timeout: 0.35)
+        wait(for: [expectation], timeout: 1)
         XCTAssertTrue(Session.shared.tasksInProgress.isEmpty)
     }
 
     func testSessionQueueCancelsAllDataTasks() {
         let expectation = XCTestExpectation(description: "waiting for images")
 
-        var errors: [Error] = []
+        var errors: [NetworkingError] = []
         for index in 0 ... 3 {
             makeACall(index == 3 ? expectation : nil) { result in
-                if case let .failure(error) = result,
-                   case let .underlyingError(err, _, _) = error {
-                    errors.append(err)
+                if case let .failure(error) = result {
+                    print("appending error: \(error)")
+                    errors.append(error)
                 }
             }
         }
         XCTAssertEqual(Session.shared.tasksInProgress.count, 4)
 
         NetworkableTasks.cancellAll()
-        wait(for: [expectation], timeout: 0.5)
-
+        wait(for: [expectation], timeout: 1)
+        print("appended errors: \(errors)")
         XCTAssertTrue(Session.shared.tasksInProgress.isEmpty)
         XCTAssertEqual(errors.count, 4)
         for error in errors {
-            XCTAssertTrue((error as NSError).code == NSURLErrorCancelled)
+            if case NetworkingError.dataTaskCancelled = error {
+                continue
+            }
+            XCTFail("Error is not in expected NetworkingError.dataTaskCancelled value.")
         }
     }
 
@@ -84,7 +87,10 @@ class NetworkableTasksTests: XCTestCase {
             url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
         ).fetch(Data.self) { result in
             completion?(result)
-            expectation?.fulfill()
+            RunLoop.current.run(until: Date() + 0.1)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                expectation?.fulfill()
+            }
         }
     }
 }
