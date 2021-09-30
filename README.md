@@ -156,3 +156,10 @@ StubURLProtocol.delay = 3
 StubURLProtocol is designed for **unit tests only** and would not work if there's no any unit testing process in progress.
 
 You need to set `StubURLProtocol.result` before each `Networkable.fetch` call to achieve necessary result.
+
+### Task Cancellation
+Networking supports canceling ongoing requests. It can be helpful when you need to cancel all fired requests without waiting to respond them.
+```swift
+NetworkableTasks.cancelAll()
+```
+After calling ```cancelAll()``` function, ongoing requeste returns ```NetworkingError.dataTaskCancelled``` in their ```failure``` block immediately.  
