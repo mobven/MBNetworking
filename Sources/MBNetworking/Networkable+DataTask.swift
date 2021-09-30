@@ -42,10 +42,15 @@ extension Networkable {
                 completion(.failure(error))
 
             } else if let error = error {
-                let error = MBErrorKit.NetworkingError.underlyingError(error, response, data)
-                MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
-                self.printErrorLog(error)
-                completion(.failure(error))
+                let networkingError: NetworkingError
+                if (error as NSError).code == NSURLErrorCancelled {
+                    networkingError = .dataTaskCancelled
+                } else {
+                    networkingError = MBErrorKit.NetworkingError.underlyingError(error, response, data)
+                }
+                MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: networkingError)
+                self.printErrorLog(networkingError)
+                completion(.failure(networkingError))
 
             } else if let httpResponse = response as? HTTPURLResponse,
                       self.isSuccess(httpResponse.statusCode) {
