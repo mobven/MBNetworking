@@ -162,4 +162,4 @@ Networking supports cancelling ongoing requests. It can be helpful when you need
 ```swift
 NetworkableTasks.cancelAll()
 ```
-After calling ```cancelAll()``` function, ongoing requeste returns ```NetworkingError.dataTaskCancelled``` in their ```failure``` block immediately.  
+After calling ```cancelAll()``` function, ongoing request returns ```NetworkingError.dataTaskCancelled``` in their ```failure``` block immediately.  
