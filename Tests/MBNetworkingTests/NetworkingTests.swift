@@ -7,13 +7,13 @@
 //
 
 import XCTest
-@testable import MobKitCore
 @testable import MBNetworking
+@testable import MobKitCore
 
 class NetworkingTests: XCTestCase {
-    
     override func setUp() {
         MobKit.isDeveloperModeOn = true
+        StubURLProtocol.delay = .zero
     }
 
     func testDataDownload() {
@@ -28,11 +28,9 @@ class NetworkingTests: XCTestCase {
         }
         XCTAssertNotNil(image)
     }
-    
 }
 
 enum Download: Networkable {
-
     case data(url: URL)
 
     var request: URLRequest {
@@ -41,5 +39,4 @@ enum Download: Networkable {
             return getRequest(url: url, queryItems: [:])
         }
     }
-
 }
