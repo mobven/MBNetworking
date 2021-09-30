@@ -9,7 +9,6 @@
 import Foundation
 
 class Session {
-
     static var instance: Session?
     static var shared: Session {
         guard let instance = instance else {
@@ -18,18 +17,20 @@ class Session {
         }
         return instance
     }
-    
+
     var session: URLSession
     var delegate: URLSessionDelegate
-    
+
+    var tasksInProgress: [String: URLSessionDataTask] = [:]
+
     /// Timeout for requets.
     var timeout: TimeOut {
         didSet {
-            self.session.configuration.timeoutIntervalForRequest = timeout.request
-            self.session.configuration.timeoutIntervalForResource = timeout.resource
+            session.configuration.timeoutIntervalForRequest = timeout.request
+            session.configuration.timeoutIntervalForResource = timeout.resource
         }
     }
-    
+
     /// SSL certificate paths of `URLSessionDelegate`.
     var certificatePaths: [String] = [] {
         didSet {
@@ -40,19 +41,23 @@ class Session {
     /// Configures networking to trust session authentication challenge, even if the certificate is not trusted.
     func setServerTrustedURLAuthenticationChallenge() {
         let configuration = URLSession.shared.configuration
-        self.delegate = UntrustedURLSessionDelegate()
-        session = URLSession(configuration: configuration,
-                             delegate: delegate,
-                             delegateQueue: nil)
+        delegate = UntrustedURLSessionDelegate()
+        session = URLSession(
+            configuration: configuration,
+            delegate: delegate,
+            delegateQueue: nil
+        )
     }
-    
+
     required init() {
         let configuration = URLSession.shared.configuration
         timeout = TimeOut(request: 60, resource: 60)
         delegate = URLSessionPinningDelegate()
-        session = URLSession(configuration: configuration,
-                                  delegate: delegate,
-                                  delegateQueue: nil)
+        session = URLSession(
+            configuration: configuration,
+            delegate: delegate,
+            delegateQueue: nil
+        )
     }
 
     func setStubProtocolEnabled(_ isEnabled: Bool) {
@@ -64,9 +69,11 @@ class Session {
             URLProtocol.unregisterClass(StubURLProtocol.self)
             configuration.protocolClasses = nil
         }
-        session = URLSession(configuration: configuration,
-                                  delegate: delegate,
-                                  delegateQueue: nil)
+        session = URLSession(
+            configuration: configuration,
+            delegate: delegate,
+            delegateQueue: nil
+        )
     }
 
     /// `URLSessionConfiguration` timeout.
@@ -76,5 +83,4 @@ class Session {
         /// The maximum amount of time that a resource request should be allowed to take.
         var resource: TimeInterval
     }
-    
 }

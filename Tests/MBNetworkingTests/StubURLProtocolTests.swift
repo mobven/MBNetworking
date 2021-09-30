@@ -1,20 +1,19 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Rashid Ramazanov on 16.02.2021.
 //
 
 import Foundation
 import XCTest
-@testable import MobKitCore
 @testable import MBNetworking
+@testable import MobKitCore
 
 class StubURLProtocolTests: XCTestCase {
-
     override func setUp() {
         MobKit.isDeveloperModeOn = true
-
+        StubURLProtocol.delay = .zero
     }
 
     func test_When_StubProtocolSet() {
@@ -37,7 +36,7 @@ class StubURLProtocolTests: XCTestCase {
 
     func test_When_StubProtocolHasDelay() {
         StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
-        StubURLProtocol.delay = 3
+        StubURLProtocol.delay = 0.3
         var string: String?
         Download.data(
             url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
@@ -90,10 +89,9 @@ class StubURLProtocolTests: XCTestCase {
                 image = UIImage(data: data)
             }
         }
-        XCTWaiter().wait(for: [XCTestExpectation()], timeout: 2)
+        XCTWaiter().wait(for: [XCTestExpectation()], timeout: 1)
         // The real image in the link is 1400x637 size.
         XCTAssertNotNil(image)
         XCTAssertEqual(image?.size.width, 1400)
     }
-
 }
