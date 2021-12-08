@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Session {
+final class Session {
     static var instance: Session?
     static var shared: Session {
         guard let instance = instance else {
@@ -24,7 +24,7 @@ class Session {
     var tasksInProgress: [String: URLSessionDataTask] = [:]
 
     /// Timeout for requets.
-    var timeout: TimeOut {
+    var timeout = TimeOut(request: 60, resource: 60) {
         didSet {
             session.configuration.timeoutIntervalForRequest = timeout.request
             session.configuration.timeoutIntervalForResource = timeout.resource
@@ -38,9 +38,20 @@ class Session {
         }
     }
 
+    /// `URLSessionConfiguration` for initiating `URLSession`.
+    /// Default value is `URLSessionConfiguration.default` which can be set to `URLSessionConfiguration.ephemeral`.
+    var configuration = URLSessionConfiguration.default {
+        didSet {
+            session = URLSession(
+                configuration: configuration,
+                delegate: delegate,
+                delegateQueue: nil
+            )
+        }
+    }
+
     /// Configures networking to trust session authentication challenge, even if the certificate is not trusted.
     func setServerTrustedURLAuthenticationChallenge() {
-        let configuration = URLSession.shared.configuration
         delegate = UntrustedURLSessionDelegate()
         session = URLSession(
             configuration: configuration,
@@ -50,8 +61,6 @@ class Session {
     }
 
     required init() {
-        let configuration = URLSession.shared.configuration
-        timeout = TimeOut(request: 60, resource: 60)
         delegate = URLSessionPinningDelegate()
         session = URLSession(
             configuration: configuration,
