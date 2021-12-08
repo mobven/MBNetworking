@@ -165,7 +165,7 @@ NetworkableTasks.cancelAll()
 After calling ```cancelAll()``` function, ongoing request returns ```NetworkingError.dataTaskCancelled``` in their ```failure``` block immediately.  
 
 ### Setting URLSessionConfiguration
-Networking allows to set `URLSessionConfiguration` through its `NetworkableConfigs`. Possible values can be [default](https://developer.apple.com/documentation/foundation/urlsessionconfiguration/1411560-default) and [ephemmeral](https://developer.apple.com/documentation/foundation/urlsessionconfiguration/1410529-ephemeral).
+Networking allows to set `URLSessionConfiguration` through its `NetworkableConfigs`. Possible values can be [default](https://developer.apple.com/documentation/foundation/urlsessionconfiguration/1411560-default) and [ephemeral](https://developer.apple.com/documentation/foundation/urlsessionconfiguration/1410529-ephemeral).
 **By default, `MBNetworking` uses `URLSessionConfiguration.default`.**
 ```swift
 NetworkableConfigs.default.set(configuration: .ephemeral)
