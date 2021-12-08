@@ -8,9 +8,7 @@
 
 import Foundation
 import XCTest
-@testable import MBErrorKit
 @testable import MBNetworking
-@testable import MobKitCore
 
 class NetworkableConfigsTests: XCTestCase {
     func testURLSessionConfigurationDefaultValue() {
