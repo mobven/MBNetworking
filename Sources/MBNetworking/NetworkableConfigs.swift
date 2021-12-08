@@ -29,4 +29,11 @@ public enum NetworkableConfigs {
     public func setServerTrustedURLAuthenticationChallenge() {
         Session.shared.setServerTrustedURLAuthenticationChallenge()
     }
+
+    /// Sets `URLSessionConfiguration` for initiating `URLSession`.
+    /// Default value is `URLSessionConfiguration.default` which can be set to `URLSessionConfiguration.ephemeral`.
+    /// - Parameter configuration: URLSessionConfiguration.
+    public func set(configuration: URLSessionConfiguration) {
+        Session.shared.configuration = configuration
+    }
 }
