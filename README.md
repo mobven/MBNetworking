@@ -170,3 +170,7 @@ Networking allows to set `URLSessionConfiguration` through its `NetworkableConfi
 ```swift
 NetworkableConfigs.default.set(configuration: .ephemeral)
 ```
+
+
+### What's next
+- [ ] Async/await support with Swift 5.5
