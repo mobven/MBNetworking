@@ -105,13 +105,13 @@ extension Networkable {
         let taskId = UUID().uuidString
         let task = Session.shared.session
             .dataTask(with: urlRequest, completionHandler: { data, response, error in
-                Session.shared.tasksInProgress[taskId] = nil
+                Session.shared.tasksInProgress.removeValue(forKey: taskId)
                 self.printResponse(data)
                 DispatchQueue.main.async {
                     completion(response, data, error)
                 }
             })
         task.resume()
-        Session.shared.tasksInProgress[taskId] = task
+        Session.shared.tasksInProgress.updateValue(task, forKey: taskId)
     }
 }
