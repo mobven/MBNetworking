@@ -6,13 +6,14 @@ import PackageDescription
 let package = Package(
     name: "MBNetworking",
     platforms: [
-        .iOS(.v10)
+        .iOS(.v10), .macOS(.v11)
     ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "MBNetworking",
-            targets: ["MBNetworking"])
+            targets: ["MBNetworking"]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/mobven/MBErrorKit.git", .branch("develop"))
@@ -23,7 +24,8 @@ let package = Package(
         // and on products in packages which this package depends on.
         .target(
             name: "MBNetworking",
-            dependencies: ["MBErrorKit"]),
+            dependencies: ["MBErrorKit"]
+        ),
         .testTarget(
             name: "MBNetworkingTests",
             dependencies: ["MBNetworking"],
@@ -32,6 +34,7 @@ let package = Package(
                 .copy("Resources/httpError.json"),
                 .copy("Resources/imageDownload.jpg"),
                 .copy("Resources/some.txt")
-            ])
+            ]
+        )
     ]
 )

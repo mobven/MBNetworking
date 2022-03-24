@@ -14,6 +14,7 @@ class StubURLProtocolTests: XCTestCase {
     override func setUp() {
         MobKit.isDeveloperModeOn = true
         StubURLProtocol.delay = .zero
+        StubURLProtocol.result = nil
     }
 
     func test_When_StubProtocolSet() {
@@ -38,14 +39,16 @@ class StubURLProtocolTests: XCTestCase {
         StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
         StubURLProtocol.delay = 0.3
         var string: String?
+        let expectation = expectation(description: "wait for delay")
         Download.data(
             url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
         ).fetch(Data.self) { result in
             if case let .success(data) = result {
                 string = String(data: data, encoding: .utf8)
             }
+            expectation.fulfill()
         }
-        XCTWaiter().wait(for: [XCTestExpectation()], timeout: StubURLProtocol.delay)
+        wait(for: [expectation], timeout: StubURLProtocol.delay)
         XCTAssertEqual(string, "some\n")
     }
 
@@ -64,34 +67,37 @@ class StubURLProtocolTests: XCTestCase {
         XCTAssertEqual(response?.resultCount, 0)
     }
 
-    func test_When_StubProtocolDownloadsImage() {
-        StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "imageDownload", withExtension: "jpg"))
-        var image: UIImage?
-        Download.data(
-            url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
-        ).fetch(Data.self) { result in
-            if case let .success(data) = result {
-                image = UIImage(data: data)
+    #if canImport(UIKit)
+        func test_When_StubProtocolDownloadsImage() {
+            StubURLProtocol
+                .result = .getData(from: Bundle.module.url(forResource: "imageDownload", withExtension: "jpg"))
+            var image: UIImage?
+            Download.data(
+                url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
+            ).fetch(Data.self) { result in
+                if case let .success(data) = result {
+                    image = UIImage(data: data)
+                }
             }
+            // The image in the link is 200x150 size.
+            XCTAssertNotNil(image)
+            XCTAssertEqual(image?.size.width, 200)
         }
-        // The image in the link is 200x150 size.
-        XCTAssertNotNil(image)
-        XCTAssertEqual(image?.size.width, 200)
-    }
 
-    func test_When_StubProtocolCleared() {
-        StubURLProtocol.result = nil
-        var image: UIImage?
-        Download.data(
-            url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
-        ).fetch(Data.self) { result in
-            if case let .success(data) = result {
-                image = UIImage(data: data)
+        func test_When_StubProtocolCleared() {
+            StubURLProtocol.result = nil
+            var image: UIImage?
+            Download.data(
+                url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
+            ).fetch(Data.self) { result in
+                if case let .success(data) = result {
+                    image = UIImage(data: data)
+                }
             }
+            XCTWaiter().wait(for: [XCTestExpectation()], timeout: 1)
+            // The real image in the link is 1400x637 size.
+            XCTAssertNotNil(image)
+            XCTAssertEqual(image?.size.width, 1400)
         }
-        XCTWaiter().wait(for: [XCTestExpectation()], timeout: 1)
-        // The real image in the link is 1400x637 size.
-        XCTAssertNotNil(image)
-        XCTAssertEqual(image?.size.width, 1400)
-    }
+    #endif
 }
