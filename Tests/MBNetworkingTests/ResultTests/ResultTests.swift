@@ -6,10 +6,10 @@
 //  Copyright © 2020 Mobven. All rights reserved.
 //
 
-import XCTest
 import MobKitCore
-@testable import MBNetworking
+import XCTest
 @testable import MBErrorKit
+@testable import MBNetworking
 
 struct DecodableWrong: Decodable {
     var resultCount: String?
@@ -20,69 +20,98 @@ struct DecodableTrue: Decodable {
 }
 
 class ResultTests: XCTestCase {
-    
     override func setUp() {
         MobKit.isDeveloperModeOn = true
     }
 
     func testDecodableWrong() {
         StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "results", withExtension: "json"))
+        let expectation = expectation(description: "waiting")
+        var apiResult: Result<DecodableWrong, NetworkingError>?
         ResultTestAPI.fetch.fetch(DecodableWrong.self) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should fail.")
-            case .failure(let error):
-                XCTAssertTrue(error.errorTitle == "Decoding Error")
-            }
+            apiResult = result
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1)
+        switch apiResult! {
+        case .success:
+            XCTFail("Result should fail.")
+        case let .failure(error):
+            XCTAssertTrue(error.errorTitle == "Decoding Error")
         }
     }
-    
+
     func testDecodableTrue() {
         StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "results", withExtension: "json"))
+        let expectation = expectation(description: "waiting")
+        var apiResult: Result<DecodableTrue, NetworkingError>?
         ResultTestAPI.fetch.fetch(DecodableTrue.self) { result in
-            switch result {
-            case .success(let response):
-                XCTAssertTrue(response.resultCount == 0)
-            case .failure:
-                XCTFail("Result should succeed.")
-            }
+            apiResult = result
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1)
+        switch apiResult! {
+        case let .success(response):
+            XCTAssertTrue(response.resultCount == 0)
+        case let .failure(error):
+            XCTFail("expected success, got \(error.errorTitle)")
         }
     }
-    
+
     func testUnderlyingError() {
         StubURLProtocol.result = .failure(NSError(domain: "", code: -2, userInfo: nil))
+        let expectation = expectation(description: "waiting")
+        var apiResult: Result<DecodableTrue, NetworkingError>?
         ResultTestAPI.underlyingError.fetch(DecodableTrue.self) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should fail.")
-            case .failure(let error):
-                XCTAssertTrue(error.errorTitle == "Underlying Error")
-            }
+            apiResult = result
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1)
+        switch apiResult! {
+        case .success:
+            XCTFail("Result should fail.")
+        case let .failure(error):
+            XCTAssertTrue(
+                error.errorTitle == "Underlying Error", "expected underlying error, got \(error.errorTitle)"
+            )
         }
     }
-    
+
     func testHTTPError() {
         StubURLProtocol.result = .failureStatusCode(500)
+        let expectation = expectation(description: "waiting")
+        var apiResult: Result<DecodableTrue, NetworkingError>?
         ResultTestAPI.httpError.fetch(DecodableTrue.self) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should fail.")
-            case .failure(let error):
-                XCTAssertTrue(error.errorTitle == "HTTP Error")
-            }
+            apiResult = result
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1)
+        switch apiResult! {
+        case .success:
+            XCTFail("Result should fail.")
+        case let .failure(error):
+            XCTAssertTrue(
+                error.errorTitle == "HTTP Error", "expected http error, got \(error.errorTitle)"
+            )
         }
     }
 
     func testNetworkError() {
         StubURLProtocol.result = .failure(NSError(domain: "", code: NSURLErrorNotConnectedToInternet, userInfo: nil))
+        let expectation = expectation(description: "waiting")
+        var apiResult: Result<DecodableTrue, NetworkingError>?
         ResultTestAPI.fetch.fetch(DecodableTrue.self) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should fail.")
-            case .failure(let error):
-                XCTAssertTrue(error.errorTitle == "Network Connection Error")
-            }
+            apiResult = result
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1)
+        switch apiResult! {
+        case .success:
+            XCTFail("Result should fail.")
+        case let .failure(error):
+            XCTAssertTrue(
+                error.errorTitle == "Network Connection Error", "expected failure, got \(error.errorTitle)"
+            )
         }
     }
-    
 }
