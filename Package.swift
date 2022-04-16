@@ -33,7 +33,11 @@ let package = Package(
                 .copy("Resources/results.json"),
                 .copy("Resources/httpError.json"),
                 .copy("Resources/imageDownload.jpg"),
-                .copy("Resources/some.txt")
+                .copy("Resources/some.txt"),
+                .copy("Resources/macfit-ssl-cert-old.der"),
+                .copy("Resources/macfit-ssl-cert-new.der"),
+                .copy("Resources/macfit-ssl-cert.der"),
+                .copy("Resources/denizbank-cert.der")
             ]
         )
     ]

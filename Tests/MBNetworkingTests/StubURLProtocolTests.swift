@@ -1,7 +1,7 @@
 //
-//  File.swift
+//  StubURLProtocolTests.swift
 //
-//
+//  MBNetworkingTests
 //  Created by Rashid Ramazanov on 16.02.2021.
 //
 
@@ -15,6 +15,7 @@ class StubURLProtocolTests: XCTestCase {
         MobKit.isDeveloperModeOn = true
         StubURLProtocol.delay = .zero
         StubURLProtocol.result = nil
+        Session.shared.certificatePaths = []
     }
 
     func test_When_StubProtocolSet() {
@@ -87,14 +88,16 @@ class StubURLProtocolTests: XCTestCase {
         func test_When_StubProtocolCleared() {
             StubURLProtocol.result = nil
             var image: UIImage?
+            let expectation = expectation(description: "waiting")
             Download.data(
                 url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
             ).fetch(Data.self) { result in
                 if case let .success(data) = result {
                     image = UIImage(data: data)
                 }
+                expectation.fulfill()
             }
-            XCTWaiter().wait(for: [XCTestExpectation()], timeout: 1)
+            wait(for: [expectation], timeout: 1)
             // The real image in the link is 1400x637 size.
             XCTAssertNotNil(image)
             XCTAssertEqual(image?.size.width, 1400)
