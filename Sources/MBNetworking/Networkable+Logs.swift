@@ -59,6 +59,7 @@ extension Networkable {
     private func printData(_ data: Data?) {
         if let data = data {
             if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
+               !(jsonObject is NSNull),
                let json = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
                let string = String(data: json, encoding: .utf8) {
                 print(string)
