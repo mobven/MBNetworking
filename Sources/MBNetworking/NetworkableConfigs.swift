@@ -14,6 +14,12 @@ public enum NetworkableConfigs {
     /// Sets SSL certificate to be used in SSL pinning.
     /// - parameter certificateResourcePaths: Paths of the certificates for ssl pinning.
     public func setCertificatePaths(_ certificateResourcePaths: String...) {
+        setCertificatePathArray(certificateResourcePaths)
+    }
+
+    /// Sets SSL certificate to be used in SSL pinning.
+    /// - parameter certificateResourcePaths: Paths of the certificates for ssl pinning.
+    public func setCertificatePathArray(_ certificateResourcePaths: [String]) {
         Session.shared.certificatePaths = certificateResourcePaths
     }
 
