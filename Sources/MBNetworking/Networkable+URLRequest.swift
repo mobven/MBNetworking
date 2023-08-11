@@ -191,4 +191,6 @@ public enum RequestType: String {
     case PUT
     /// HTTP DELETE request
     case DELETE
+    /// HTTP PATCH request
+    case PATCH
 }
