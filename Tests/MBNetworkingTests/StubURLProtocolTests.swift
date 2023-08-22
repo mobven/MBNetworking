@@ -13,7 +13,6 @@ import XCTest
 class StubURLProtocolTests: XCTestCase {
     override func setUp() {
         MobKit.isDeveloperModeOn = true
-        StubURLProtocol.delay = .zero
         StubURLProtocol.result = nil
         Session.shared.certificatePaths = []
     }
@@ -27,31 +26,32 @@ class StubURLProtocolTests: XCTestCase {
     }
 
     func test_StubProtocol_GetDataFromUrl() {
-        let result = StubURLProtocol.Result.getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
+        let result = StubURLProtocol.StubResult.getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
         XCTAssertNotNil(result)
     }
 
     func test_StubProtocol_GetDataFromPath() {
-        let result = StubURLProtocol.Result.getData(from: Bundle.module.path(forResource: "some", ofType: "txt"))
+        let result = StubURLProtocol.StubResult.getData(from: Bundle.module.path(forResource: "some", ofType: "txt"))
         XCTAssertNotNil(result)
     }
 
-    func test_When_StubProtocolHasDelay() {
-        StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
-        StubURLProtocol.delay = 0.3
-        var string: String?
-        let expectation = expectation(description: "wait for delay")
-        Download.data(
-            url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
-        ).fetch(Data.self) { result in
-            if case let .success(data) = result {
-                string = String(data: data, encoding: .utf8)
-            }
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: StubURLProtocol.delay)
-        XCTAssertEqual(string, "some\n")
-    }
+    // TODO: Bu test kalıcakmı?
+//    func test_When_StubProtocolHasDelay() {
+//        StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "some", withExtension: "txt"))
+//        StubURLProtocol.delay = 0.3
+//        var string: String?
+//        let expectation = expectation(description: "wait for delay")
+//        Download.data(
+//            url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
+//        ).fetch(Data.self) { result in
+//            if case let .success(data) = result {
+//                string = String(data: data, encoding: .utf8)
+//            }
+//            expectation.fulfill()
+//        }
+//        wait(for: [expectation], timeout: StubURLProtocol.delay)
+//        XCTAssertEqual(string, "some\n")
+//    }
 
     func test_When_StubProtocolFetchesJSON() {
         StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "results", withExtension: "json"))

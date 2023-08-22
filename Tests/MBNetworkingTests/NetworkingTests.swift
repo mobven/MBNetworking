@@ -14,7 +14,6 @@ import XCTest
     class NetworkingTests: XCTestCase {
         override func setUp() {
             MobKit.isDeveloperModeOn = true
-            StubURLProtocol.delay = .zero
         }
 
         func testDataDownload() {

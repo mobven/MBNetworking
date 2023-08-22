@@ -96,6 +96,7 @@ class ResultTests: XCTestCase {
         }
     }
 
+    // TODO: stubURLProtocol de underlyingError veriyoruz.
     func testNetworkError() {
         StubURLProtocol.result = .failure(NSError(domain: "", code: NSURLErrorNotConnectedToInternet, userInfo: nil))
         let expectation = expectation(description: "waiting")
