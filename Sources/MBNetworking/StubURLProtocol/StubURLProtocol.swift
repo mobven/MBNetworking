@@ -26,6 +26,7 @@ public final class StubURLProtocol {
         }
     }
 
+    // TODO: Error case'lere bakalım 
     static func canResponse<V: Decodable>(
         _ type: V.Type, completion: @escaping ((Result<V, MBErrorKit.NetworkingError>) -> Void)
     ) -> Bool {
