@@ -25,14 +25,6 @@ public final class StubURLProtocol: URLProtocol {
             }
         }
     }
-
-    /// Delay for the response for the current request.
-    public static var delay: TimeInterval = 0
-
-    static var isEnabled: Bool {
-        return result != nil
-    }
-
 }
 
 extension StubURLProtocol {
