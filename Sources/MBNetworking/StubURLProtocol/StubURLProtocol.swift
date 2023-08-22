@@ -11,10 +11,10 @@ import MBErrorKit
 
 /// URLProtocol for simplifying unit tests by acting man-in-the-middle on for the session.
 /// It's configured to work only with test targets. It won't work if there's no test process in progress.
-public final class StubURLProtocol: URLProtocol {
+public final class StubURLProtocol {
 
     /// Result of the request, which is going to happen.
-    public static var result: Result? {
+    public static var result: StubResult? {
         didSet {
             if result == nil {
                 Session.shared.setStubProtocolEnabled(false)
@@ -25,47 +25,53 @@ public final class StubURLProtocol: URLProtocol {
             }
         }
     }
-}
 
-extension StubURLProtocol {
-
-    public override class func canInit(with request: URLRequest) -> Bool {
-        return isEnabled
-    }
-
-    public override class func canInit(with task: URLSessionTask) -> Bool {
-        return isEnabled
-    }
-
-    public override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        return request
-    }
-
-    public override func startLoading() {
-        Timer.scheduledTimer(withTimeInterval: StubURLProtocol.delay, repeats: false) { [weak self] _ in
-            guard let self = self else { return }
-            guard let result = StubURLProtocol.result else {
-                self.client?.urlProtocolDidFinishLoading(self)
-                return
-            }
-
-            switch result {
-            case let .success(data):
-                self.client?.urlProtocol(self, didLoad: data)
-            case let .failure(error):
-                self.client?.urlProtocol(self, didFailWithError: error)
-            case let .failureStatusCode(statusCode):
-                if let url = self.request.url,
-                   let response = HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: nil) {
-                    self.client?.urlProtocol(self, cachedResponseIsValid: CachedURLResponse(response: response, data: Data()))
-                }
-            }
-            self.client?.urlProtocolDidFinishLoading(self)
+    static func canResponse<V: Decodable>(
+        _ type: V.Type, completion: @escaping ((Result<V, MBErrorKit.NetworkingError>) -> Void)
+    ) -> Bool {
+        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil else {
+            return false
         }
-    }
+        guard let result = StubURLProtocol.result else {
+            return false
+        }
+        switch result {
+        case let .success(data):
+            do {
+                // swiftlint:disable force_cast
+                // If requested decodable type is Data, received data will be returned.
+                if V.Type.self == Data.Type.self {
+                    completion(.success(data as! V))
+                    return true
+                }
+                let decodableData = try JSONDecoder().decode(V.self, from: data)
+                completion(.success(decodableData))
+            } catch {
+                let error = MBErrorKit.NetworkingError
+                    .decodingError((NSError(domain: "decoding error", code: -333)), nil, data)
+                MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
+                completion(.failure(error))
+            }
 
-    public override func stopLoading() {
-        // Nothing to handle
+        case let .failure(error):
+            let error = MBErrorKit.NetworkingError.underlyingError(error, nil, nil)
+            MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
+            completion(.failure(error))
+        case let .failureStatusCode(int):
+            let error = MBErrorKit.NetworkingError.httpError(
+                NSError(domain: "stub", code: int),
+                HTTPURLResponse(
+                    url: URL(string: "https://www.apple.com")!,
+                    statusCode: int,
+                    httpVersion: "",
+                    headerFields: ["Content-Type": "application/json"]
+                )!,
+                nil
+            )
+            MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
+            completion(.failure(error))
+        }
+        // swiftlint:enable force_cast
+        return true
     }
-
 }

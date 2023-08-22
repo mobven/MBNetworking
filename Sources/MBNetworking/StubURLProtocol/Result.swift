@@ -9,9 +9,7 @@
 import Foundation
 
 extension StubURLProtocol {
-
-    public enum Result {
-
+    public enum StubResult {
         /// Successfull result with specified data
         /// You can use `StubURLProtocol.Result.getData()` to read mock data from bundle, easily and inline.
         case success(Data)
@@ -21,13 +19,10 @@ extension StubURLProtocol {
         /// Failure with the specified status code.
         /// The  actual result will of `Networkable.fetch` will be `NetworkingError.httpError`.
         case failureStatusCode(Int)
-
     }
-
 }
 
-public extension StubURLProtocol.Result {
-
+public extension StubURLProtocol.StubResult {
     /// Prepares `StubURLProtocol.Result.success(Data)` from specified Bundle path.
     /// - Parameter url: Bundle URL for the specifed resource. Can be received from `url(forResource:,ofType:)`.
     /// - Returns: Returns `StubURLProtocol.Result.success(Data)` with data from specified file url.
@@ -50,5 +45,4 @@ public extension StubURLProtocol.Result {
         }
         return .success(data)
     }
-
 }
