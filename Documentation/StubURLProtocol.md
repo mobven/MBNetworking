@@ -129,23 +129,26 @@ public extension API {
 Api Response model
 
 ```swift
-public struct GetCitiesResponse: Decodable {
-    public let cities: [City]
-}
+public struct GetActivitiesResponse: Decodable {
+    public let activities: [ActivityModel]?
 
-// MARK: - City
-
-public struct City: Decodable {
-    public var id: Int64!
-    public var name: String?
-    public var latitude: Double!
-    public var longitude: Double!
-
-    enum CodingKeys: String, CodingKey {
-        case id = "CityID"
-        case name = "CityName"
-        case latitude = "CityLatitude"
-        case longitude = "CityLongitude"
+    public struct ActivityModel: Codable {
+        public let activityGUID: String?
+        public let webID: Int?
+        public let companyName: String?
+        public let categoryName: String?
+        public let title: String?
+        public let description: String?
+        public let totalQuota: Int?
+        public let joinedCount: Int?
+        public let joinStartDate: String?
+        public let joinEndDate: String?
+        public let image: String?
+        public let imageMobile: String?
+        public let spotImage: String?
+        public let spotTitle: String?
+        public let spotDescription: String?
+        public let joined: Bool?
     }
 }
 ```
