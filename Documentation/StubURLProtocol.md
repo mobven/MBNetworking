@@ -12,20 +12,14 @@ final class UnitTestStubs {
         guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil else {
             return false
         }
-        guard let result = MarketUnitTestStubs.result else {
+        guard let result = UnitTestStubs.result else {
             return false
         }
         switch result {
         case let .success(data):
             do {
-                // swiftlint:disable force_cast
-                guard !(V.self is MarketEmptyCodable.Type) else {
-                    completion(.success(MarketEmptyCodable() as! V))
-                    return true
-                }
                 let response = try JSONDecoder().decode(V.self, from: data)
                 completion(.success(response))
-                // swiftlint:enable force_cast
             } catch {
                 completion(
                     .failure(NSError(domain: "decoding error", code: -333))
@@ -43,7 +37,7 @@ final class UnitTestStubs {
 
 We write API responses as an extension to the UnitTestStub class.
 ```swift
-extension MarketUnitTestStubs {
+extension UnitTestStubs {
     enum StubResult {
         /// Successfull result with specified data
         /// You can use `StubURLProtocol.Result.getData()` to read mock data from bundle, easily and inline.
@@ -60,7 +54,7 @@ extension MarketUnitTestStubs {
 Prepares `StubURLProtocol.Result.success(Data)` from specified Bundle path.
 
 ```swift
-extension MarketUnitTestStubs.StubResult {
+extension UnitTestStubs.StubResult {
     /// Prepares `StubURLProtocol.Result.success(Data)` from specified Bundle path.
     /// - Parameter url: Bundle URL for the specifed resource. Can be received from `url(forResource:,ofType:)`.
     /// - Returns: Returns `StubURLProtocol.Result.success(Data)` with data from specified file url.
@@ -94,12 +88,10 @@ public protocol AppNetworkable: Networkable {}
 
 public extension AppNetworkable {
     func fetchResponse<V: Decodable>(
-        _ type: V.Type, showLoader: Bool = false, completion: @escaping ((Result<V, Error>) -> Void)
+        _ type: V.Type, completion: @escaping ((Result<V, Error>) -> Void)
     ) {
         guard !UnitTestStubs.canResponse(type, completion: completion) else { return }
-        showLoader ? Loader.shared.show() : ()
         fetch(AppResponse<V>.self) { result in
-            showLoader ? Loader.shared.hide() : ()
             fetchResponseResult(result, completion: completion)
         }
     }
@@ -116,9 +108,8 @@ public extension API {
             switch self {
             case let .getCities(isTani):
                 return getRequest(
-                    url: API.getURL(with: "v1/location/\(isTani ? "taniCities" : "cities")"),
+                    url: API.getURL(with: "https://example.com/v1/getCities"),
                     queryItems: [:],
-                    headers: API.getHeaders(),
                     httpMethod: .GET
                 )
             }
@@ -134,21 +125,6 @@ public struct GetActivitiesResponse: Decodable {
 
     public struct ActivityModel: Codable {
         public let activityGUID: String?
-        public let webID: Int?
-        public let companyName: String?
-        public let categoryName: String?
-        public let title: String?
-        public let description: String?
-        public let totalQuota: Int?
-        public let joinedCount: Int?
-        public let joinStartDate: String?
-        public let joinEndDate: String?
-        public let image: String?
-        public let imageMobile: String?
-        public let spotImage: String?
-        public let spotTitle: String?
-        public let spotDescription: String?
-        public let joined: Bool?
     }
 }
 ```
@@ -169,22 +145,7 @@ Populate this JSON file with the mock response data you want to use during testi
   "data": {
     "activities": [
       {
-        "activityGUID": "fa2f7924-7d03-462b-82d3-6710db23e28b",
-        "webID": 1,
-        "companyName": "Arçelik",
-        "categoryName": "Eğlence",
-        "title": "Title Test !'^+%&/()=?_",
-        "description": "Description test&nbsp;!&#39;^+%&amp;/()=?_",
-        "totalQuota": 250,
-        "joinedCount": 3,
-        "joinStartDate": "2023-05-16T10:28:21.000Z",
-        "joinEndDate": "2024-05-16T10:28:21.000Z",
-        "image": "https://preprod.kocailem.com//KocAilem-Preprod/media/Campaigns/TEST1_5.png?ext=.png",
-        "imageMobile": "https://preprod.kocailem.com//KocAilem-Preprod/media/Campaigns/TEST1_6.png?ext=.png",
-        "spotImage": "https://preprod.kocailem.com//KocAilem-Preprod/media/Campaigns/TEST1_4.png?ext=.png",
-        "spotTitle": "Spot Title !'^+%&/()=?_",
-        "spotDescription": "Spot Description&nbsp;!&#39;^+%&amp;/()=?_",
-        "joined": false
+        "activityGUID": "fa2f7924-7d03-462b-82d3-6710db23e28b"
       }
     ]
   }
