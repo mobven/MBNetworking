@@ -136,7 +136,11 @@ extension API {
 }
 ```
 
-### [Unit Testing](https://github.com/mobven/MBNetworking/blob/feature/add-Documentation/Documentation/StubURLProtocol.md)
+### Unit Testing
+#### [Custom Unit Test Stubs](https://github.com/mobven/MBNetworking/blob/feature/add-Documentation/Documentation/StubURLProtocol.md)
+
+#### StubURLProtocol (Deprecated)
+⚠️ This method has some timing issues on unit testing, depending on the running machine's performance.
 Networking provides `StubURLProtocol` which acts like man-in-the-middle to simplify stub data for unit testing. You can achieve this by setting `StubURLProtocol.result` to a any of the available values which are:
 * success(Data): Successfull result with specified data
 * failure(Error): Failure with the specified Error.
