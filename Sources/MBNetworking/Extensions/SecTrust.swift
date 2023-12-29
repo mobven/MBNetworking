@@ -31,7 +31,7 @@ public extension SecCertificate {
 
 public extension SecTrust {
     var certificates: [SecCertificate] {
-        if #available(iOS 15, macOS 12, *) {
+        if #available(iOS 15, macOS 12, watchOS 8, *) {
             return (SecTrustCopyCertificateChain(self) as? [SecCertificate]) ?? []
         } else {
             return (0 ..< SecTrustGetCertificateCount(self)).compactMap { index in
