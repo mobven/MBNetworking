@@ -103,7 +103,7 @@ extension Networkable {
 
     private func requestData(_ urlRequest: URLRequest, completion: @escaping ((URLResponse?, Data?, Error?) -> Void)) {
         let taskId = UUID().uuidString
-        var task = Session.shared.session
+        let task = Session.shared.session
             .dataTask(with: urlRequest, completionHandler: { data, response, error in
                 if let task = Session.shared.tasksInProgress[taskId] {
                     if let error {
