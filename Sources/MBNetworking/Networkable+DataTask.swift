@@ -103,16 +103,17 @@ extension Networkable {
 
     private func requestData(_ urlRequest: URLRequest, completion: @escaping ((URLResponse?, Data?, Error?) -> Void)) {
         let taskId = UUID().uuidString
-        var task: URLSessionDataTask!
-        task = Session.shared.session
+        var task = Session.shared.session
             .dataTask(with: urlRequest, completionHandler: { data, response, error in
-                Session.shared.tasksInProgress.removeValue(forKey: taskId)
-                
-                if let error {
-                    Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
-                } else if let data {
-                    Session.shared.networkLogMonitoringDelegate?.logDataTask(dataTask: task, didReceive: data)
+                if let task = Session.shared.tasksInProgress[taskId] {
+                    if let error {
+                        Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
+                    } else if let data {
+                        Session.shared.networkLogMonitoringDelegate?.logDataTask(dataTask: task, didReceive: data)
+                    }
                 }
+                
+                Session.shared.tasksInProgress.removeValue(forKey: taskId)
                 
                 self.printResponse(data)
                 DispatchQueue.main.async {
