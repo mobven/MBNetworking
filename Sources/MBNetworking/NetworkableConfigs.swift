@@ -42,4 +42,11 @@ public enum NetworkableConfigs {
     public func set(configuration: URLSessionConfiguration) {
         Session.shared.configuration = configuration
     }
+    
+    /// Sets `NetworkLogMonitoringDelegate` that used for network log monitoring.
+    /// Default value is `nil`.
+    /// - Parameter networkLogMonitoringDelegate: NetworkLogMonitoringDelegate.
+    public func set(networkLogMonitoringDelegate: NetworkLogMonitoringDelegate) {
+        Session.shared.networkLogMonitoringDelegate = networkLogMonitoringDelegate
+    }
 }

@@ -49,6 +49,10 @@ final class Session {
             )
         }
     }
+    
+    /// `NetworkLogMonitoringDelegate` that used for network log monitoring.
+    /// Default value is `nil`.
+    var networkLogMonitoringDelegate: NetworkLogMonitoringDelegate?
 
     /// Configures networking to trust session authentication challenge, even if the certificate is not trusted.
     func setServerTrustedURLAuthenticationChallenge() {
