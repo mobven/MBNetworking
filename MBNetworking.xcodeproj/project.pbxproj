@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		E8DCD6A52BA0653900489D6F /* NetworkableConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DCD6A42BA0653900489D6F /* NetworkableConfigs.swift */; };
+		E8DCD6A82BA06A6300489D6F /* NetworkLogMonitoringDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DCD6A72BA06A6300489D6F /* NetworkLogMonitoringDelegate.swift */; };
 		OBJ_109 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* NetworkingTests.swift */; };
 		OBJ_110 /* ResultTestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* ResultTestAPI.swift */; };
 		OBJ_111 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* ResultTests.swift */; };
@@ -108,6 +109,7 @@
 
 /* Begin PBXFileReference section */
 		E8DCD6A42BA0653900489D6F /* NetworkableConfigs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkableConfigs.swift; sourceTree = "<group>"; };
+		E8DCD6A72BA06A6300489D6F /* NetworkLogMonitoringDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLogMonitoringDelegate.swift; sourceTree = "<group>"; };
 		"MBErrorKit::MBErrorKit::Product" /* MBErrorKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MBErrorKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"MBNetworking::MBNetworking::Product" /* MBNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MBNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"MBNetworking::MBNetworkingTests::Product" /* MBNetworkingTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = MBNetworkingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -316,6 +318,7 @@
 				OBJ_19 /* Session.swift */,
 				OBJ_20 /* StubURLProtocol */,
 				OBJ_23 /* UploadFile.swift */,
+				E8DCD6A72BA06A6300489D6F /* NetworkLogMonitoringDelegate.swift */,
 			);
 			name = MBNetworking;
 			path = Sources/MBNetworking;
@@ -532,6 +535,7 @@
 			files = (
 				OBJ_75 /* CharacterEncoding.swift in Sources */,
 				OBJ_76 /* Data.swift in Sources */,
+				E8DCD6A82BA06A6300489D6F /* NetworkLogMonitoringDelegate.swift in Sources */,
 				OBJ_77 /* ProcessInfo.swift in Sources */,
 				OBJ_78 /* URL.swift in Sources */,
 				OBJ_79 /* Networkable+DataTask.swift in Sources */,
