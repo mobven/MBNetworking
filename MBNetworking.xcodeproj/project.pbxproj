@@ -306,12 +306,12 @@
 		OBJ_8 /* MBNetworking */ = {
 			isa = PBXGroup;
 			children = (
-				E8DCD6A42BA0653900489D6F /* NetworkableConfigs.swift */,
 				OBJ_9 /* Extensions */,
 				OBJ_14 /* Networkable+DataTask.swift */,
 				OBJ_15 /* Networkable+Logs.swift */,
 				OBJ_16 /* Networkable+Pinning.swift */,
 				OBJ_17 /* Networkable+URLRequest.swift */,
+				E8DCD6A42BA0653900489D6F /* NetworkableConfigs.swift */,
 				OBJ_18 /* Networkable.swift */,
 				OBJ_19 /* Session.swift */,
 				OBJ_20 /* StubURLProtocol */,
