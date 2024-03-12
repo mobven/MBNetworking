@@ -106,6 +106,30 @@ NetworkableConfigs.default.setServerTrustedURLAuthenticationChallenge()
 NetworkableConfigs.default.set(networkLogMonitoringDelegate: NetworkLogMonitoringDelegate)
 ```
 
+### NetworkLogMonitoringDelegate
+Implement this protocol to handle tasks creation, data receiving, and task completion with error.
+
+1. Implement the `NetworkLogMonitoringDelegate` protocol to your class.
+
+    ```swift
+    class YourClass: NetworkLogMonitoringDelegate {
+        // Implement protocol methods
+    }
+    ```
+
+2. Implement methods to handle specific network events:
+
+    ```swift
+    ///Called when a URLSessionTask is created.
+    func logTaskCreated(task: URLSessionTask) { /* Handle task creation */ }
+
+    ///Called when a URLSessionDataTask receives data.
+    func logDataTask(dataTask: URLSessionDataTask, didReceive data: Data) { /* Handle data receive */ }
+
+    //Called when a URLSessionTask completes with error.
+    func logTask(task: URLSessionTask, didCompleteWithError error: Error) { /* Handle task completion with error */ }
+    ```
+
 ### File Upload
 `Networking` supports file upload through `uploadRequest` using `MBNetworking.File`s.
 ```swift
