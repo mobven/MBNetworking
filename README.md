@@ -100,6 +100,12 @@ if let path = Bundle.main.path(forResource: "certificate", ofType: "der") {
 NetworkableConfigs.default.setServerTrustedURLAuthenticationChallenge()
 ```
 
+### Set monitoring delegate.
+`Networking` can pass data, tasks and errors of URLSession by NetworkLogMonitoringDelegate methods.
+```swift
+NetworkableConfigs.default.set(networkLogMonitoringDelegate: NetworkLogMonitoringDelegate)
+```
+
 ### File Upload
 `Networking` supports file upload through `uploadRequest` using `MBNetworking.File`s.
 ```swift
