@@ -9,7 +9,7 @@
 import Foundation
 import Security
 
-internal class URLSessionPinningDelegate: NSObject, URLSessionDelegate {
+internal class URLSessionPinningDelegate: NSObject, URLSessionTaskDelegate {
     var certificatePaths: [String] = []
 
     func urlSession(
@@ -58,6 +58,10 @@ internal class URLSessionPinningDelegate: NSObject, URLSessionDelegate {
 
         let serverCertificateData = SecCertificateCopyData(serverCertificate)
         return (serverCertificateData, serverTrust)
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
+        Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didFinishCollecting: metrics)
     }
 }
 
