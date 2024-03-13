@@ -100,34 +100,30 @@ if let path = Bundle.main.path(forResource: "certificate", ofType: "der") {
 NetworkableConfigs.default.setServerTrustedURLAuthenticationChallenge()
 ```
 
-### Set monitoring delegate.
-`Networking` can pass data, tasks and errors of URLSession by NetworkLogMonitoringDelegate methods.
-```swift
-NetworkableConfigs.default.set(networkLogMonitoringDelegate: NetworkLogMonitoringDelegate)
-```
-
 ### NetworkLogMonitoringDelegate
 Implement this protocol to handle tasks creation, data receiving, and task completion with error.
 
-1. Implement the `NetworkLogMonitoringDelegate` protocol to your class.
+1. Set monitoring delegate.
+    `Networking` can pass data, tasks and errors of URLSession by NetworkLogMonitoringDelegate methods.
+    ```swift
+    NetworkableConfigs.default.set(networkLogMonitoringDelegate: NetworkLogMonitoringDelegate)
+    ```
+
+2. Implement the `NetworkLogMonitoringDelegate` protocol to your class.
 
     ```swift
     class YourClass: NetworkLogMonitoringDelegate {
         // Implement protocol methods
+        
+        ///Called when a URLSessionTask is created.
+        func logTaskCreated(task: URLSessionTask) { /* Handle task creation */ }
+
+        ///Called when a URLSessionDataTask receives data.
+        func logDataTask(dataTask: URLSessionDataTask, didReceive data: Data) { /* Handle data receive */ }
+
+        //Called when a URLSessionTask completes with error.
+        func logTask(task: URLSessionTask, didCompleteWithError error: Error) { /* Handle task completion with error */ }
     }
-    ```
-
-2. Implement methods to handle specific network events:
-
-    ```swift
-    ///Called when a URLSessionTask is created.
-    func logTaskCreated(task: URLSessionTask) { /* Handle task creation */ }
-
-    ///Called when a URLSessionDataTask receives data.
-    func logDataTask(dataTask: URLSessionDataTask, didReceive data: Data) { /* Handle data receive */ }
-
-    //Called when a URLSessionTask completes with error.
-    func logTask(task: URLSessionTask, didCompleteWithError error: Error) { /* Handle task completion with error */ }
     ```
 
 ### File Upload
