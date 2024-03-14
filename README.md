@@ -110,7 +110,6 @@ NetworkableConfigs.default.set(networkLogMonitoringDelegate: NetworkLogMonitorin
 ```
 
 2. Implement the `NetworkLogMonitoringDelegate` protocol to your class.
-
 ```swift
 class YourClass: NetworkLogMonitoringDelegate {
 // Implement protocol methods
