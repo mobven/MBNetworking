@@ -1,5 +1,5 @@
 //
-//  NetworkLogMonitoring.swift
+//  NetworkLogMonitoringDelegate.swift
 //  MBNetworking
 //
 //  Created by Hasan Güler on 12.03.2024.
@@ -11,4 +11,5 @@ public protocol NetworkLogMonitoringDelegate {
     func logTaskCreated(task: URLSessionTask)
     func logDataTask(dataTask: URLSessionDataTask, didReceive data: Data)
     func logTask(task: URLSessionTask, didCompleteWithError error: Error)
+    func logTask(task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics)
 }

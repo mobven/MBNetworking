@@ -61,6 +61,12 @@ internal class URLSessionPinningDelegate: NSObject, URLSessionDelegate {
     }
 }
 
+extension URLSessionPinningDelegate: URLSessionTaskDelegate {
+    func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
+        Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didFinishCollecting: metrics)
+    }
+}
+
 internal class UntrustedURLSessionDelegate: NSObject, URLSessionDelegate {
     func urlSession(
         _ session: URLSession,
