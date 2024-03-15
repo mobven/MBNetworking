@@ -10,6 +10,6 @@ import Foundation
 public protocol NetworkLogMonitoringDelegate {
     func logTaskCreated(task: URLSessionTask)
     func logDataTask(dataTask: URLSessionDataTask, didReceive data: Data)
-    func logTask(task: URLSessionTask, didCompleteWithError error: Error)
+    func logTask(task: URLSessionTask, didCompleteWithError error: Error?)
     func logTask(task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics)
 }
