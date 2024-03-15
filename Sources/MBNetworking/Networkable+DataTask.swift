@@ -106,11 +106,10 @@ extension Networkable {
         let task = Session.shared.session
             .dataTask(with: urlRequest, completionHandler: { data, response, error in
                 if let task = Session.shared.tasksInProgress[taskId] {
-                    if let error {
-                        Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
-                    } else if let data {
+                    if let data {
                         Session.shared.networkLogMonitoringDelegate?.logDataTask(dataTask: task, didReceive: data)
                     }
+                    Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
                 }
                 
                 Session.shared.tasksInProgress.removeValue(forKey: taskId)
