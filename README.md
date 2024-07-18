@@ -4,7 +4,7 @@ Networking is a design-pattern framework based on Apple's `URLSession`. It's evo
 
 ## Dependency Graph [draw.io](https://drive.google.com/file/d/1O2XLr_BN4XI7V8Wpdf2_9M_a9b6BmFaV/view?usp=sharing)
 <div align="center">
-  <img alt="Networking Dependency Graph" src="docs/dependency-graph.png">
+  <img alt="Networking Dependency Graph" src="Documentation/dependency-graph.png">
 </div>
 
 ## Requirements
