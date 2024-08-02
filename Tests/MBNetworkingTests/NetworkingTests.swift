@@ -30,6 +30,19 @@ import XCTest
             }
             XCTAssertNotNil(image)
         }
+
+        func testDataDownloadAsync() async {
+            StubURLProtocol
+                .result = .getData(from: Bundle.module.url(forResource: "imageDownload", withExtension: "jpg"))
+            var image: UIImage?
+            let result = await Download.data(
+                url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
+            ).fetch(Data.self)
+            if case let .success(data) = result {
+                image = UIImage(data: data)
+            }
+            XCTAssertNotNil(image)
+        }
     }
 #endif
 
