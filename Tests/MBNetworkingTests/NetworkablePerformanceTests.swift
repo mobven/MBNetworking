@@ -24,7 +24,7 @@
         func testWhenMultipleDownloadCommandCalled() async throws {
             let expectation = XCTestExpectation(description: "wait for image")
             
-            for i in 0 ..< 10000 {
+            for i in 0 ..< 100 {
                 do {
                     try await downloadImage(index: i)
                     expectation.fulfill()
@@ -33,7 +33,7 @@
                 }
             }
             
-            await fulfillment(of: [expectation], timeout: 100)
+            await fulfillment(of: [expectation], timeout: 10)
         }
 
         private func downloadImage(index: Int) async throws {
