@@ -25,21 +25,29 @@ import XCTest
                 url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
             ).fetch(Data.self) { result in
                 if case let .success(data) = result {
+                    if case let .success(actualData) = StubURLProtocol.result {
+                        XCTAssertEqual(data, actualData)
+                    }
+                    
                     image = UIImage(data: data)
                 }
             }
             XCTAssertNotNil(image)
         }
 
-        func testDataDownloadAsync() async {
+        func testDataDownloadAsync() async throws {
             StubURLProtocol
                 .result = .getData(from: Bundle.module.url(forResource: "imageDownload", withExtension: "jpg"))
             var image: UIImage?
-            let result = await Download.data(
+            let result = try await Download.data(
                 url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
             ).fetch(Data.self)
-            if case let .success(data) = result {
-                image = UIImage(data: data)
+            if case let result = result {
+                if case let .success(actualData) = StubURLProtocol.result {
+                    XCTAssertEqual(result, actualData)
+                }
+                
+                image = UIImage(data: result)
             }
             XCTAssertNotNil(image)
         }

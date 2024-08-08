@@ -60,6 +60,11 @@ extension StubURLProtocol {
             switch result {
             case let .success(data):
                 self.client?.urlProtocol(self, didLoad: data)
+                
+                if let url = request.url,
+                   let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil) {
+                    self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .allowed)
+                }
             case let .failure(error):
                 self.client?.urlProtocol(self, didFailWithError: error)
             case let .failureStatusCode(statusCode):
@@ -68,6 +73,7 @@ extension StubURLProtocol {
                     self.client?.urlProtocol(self, cachedResponseIsValid: CachedURLResponse(response: response, data: Data()))
                 }
             }
+
             self.client?.urlProtocolDidFinishLoading(self)
         }
     }

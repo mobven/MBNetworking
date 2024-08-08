@@ -21,45 +21,44 @@
             NetworkableConfigs.default.set(configuration: URLSessionConfiguration.ephemeral)
         }
 
-        func testWhenMultipleDownloadCommandCalled() {
+        func testWhenMultipleDownloadCommandCalled() async throws {
             let expectation = XCTestExpectation(description: "wait for image")
             for i in 0 ..< 10000 {
-                downloadImage(index: i)
+                try await downloadImage(index: i)
             }
             XCTWaiter().wait(for: [expectation], timeout: 100)
+            
             Timer.scheduledTimer(withTimeInterval: 100, repeats: false) { _ in
                 expectation.fulfill()
             }
         }
 
-        private func downloadImage(index: Int) {
-            imageView.downloadImageFrom(index: index)
+        private func downloadImage(index: Int) async throws {
+            try await imageView.downloadImageFrom(index: index)
         }
     }
 
     extension UIImageView {
-        func downloadImageFrom(index: Int) {
+        func downloadImageFrom(index: Int) async throws {
             if let savedImage = FileIOManager.readFile("\(index)"),
                let image = UIImage(data: savedImage) {
                 self.image = image
             }
-            getProfilePhoto { result in
-                switch result {
-                case let .success(data):
-                    self.image = UIImage(named: "ky_avatar")
-                    let image = UIImage(data: data)
-                    self.image = image
-                    FileIOManager.writeFile("\(index)", content: data)
-                case let .failure(error):
-                    return
-                }
+            
+            let data = try? await getProfilePhoto()
+            
+            if let data {
+                self.image = UIImage(named: "ky_avatar")
+                let image = UIImage(data: data)
+                self.image = image
+                FileIOManager.writeFile("\(index)", content: data)
+            } else  {
+                return
             }
         }
 
-        private func getProfilePhoto(
-            completion: @escaping (Result<Data, NetworkingError>) -> Void
-        ) {
-            API.getProfilePhoto.fetch(Data.self, completion: completion)
+        private func getProfilePhoto() async throws -> Data {
+            try await API.getProfilePhoto.fetch(Data.self)
         }
     }
 
