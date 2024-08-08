@@ -39,16 +39,22 @@ import XCTest
             StubURLProtocol
                 .result = .getData(from: Bundle.module.url(forResource: "imageDownload", withExtension: "jpg"))
             var image: UIImage?
-            let result = try await Download.data(
-                url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
-            ).fetch(Data.self)
-            if case let result = result {
+
+            do {
+                let result = try await Download.data(
+                    url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
+                ).fetch(Data.self)
+                
                 if case let .success(actualData) = StubURLProtocol.result {
                     XCTAssertEqual(result, actualData)
                 }
                 
                 image = UIImage(data: result)
+            } catch let error {
+                print(error.localizedDescription)
+                XCTFail()
             }
+            
             XCTAssertNotNil(image)
         }
     }

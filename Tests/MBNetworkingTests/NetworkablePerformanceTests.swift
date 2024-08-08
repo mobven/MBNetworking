@@ -23,14 +23,17 @@
 
         func testWhenMultipleDownloadCommandCalled() async throws {
             let expectation = XCTestExpectation(description: "wait for image")
-            for i in 0 ..< 10000 {
-                try await downloadImage(index: i)
-            }
-            XCTWaiter().wait(for: [expectation], timeout: 100)
             
-            Timer.scheduledTimer(withTimeInterval: 100, repeats: false) { _ in
-                expectation.fulfill()
+            for i in 0 ..< 10000 {
+                do {
+                    try await downloadImage(index: i)
+                    expectation.fulfill()
+                } catch {
+                    XCTFail("Download failed: \(error)")
+                }
             }
+            
+            await fulfillment(of: [expectation], timeout: 100)
         }
 
         private func downloadImage(index: Int) async throws {
