@@ -9,7 +9,9 @@
 import Foundation
 import Security
 
-internal class URLSessionPinningDelegate: NSObject, URLSessionDelegate {
+// TODO: for iOS 13 and above create new URLSessionPinningDelegate
+// and rename below class to URLSessionPinningLegacyDelegate
+class URLSessionPinningDelegate: NSObject, URLSessionDelegate {
     var certificatePaths: [String] = []
 
     func urlSession(
@@ -67,7 +69,7 @@ extension URLSessionPinningDelegate: URLSessionTaskDelegate {
     }
 }
 
-internal class UntrustedURLSessionDelegate: NSObject, URLSessionDelegate {
+class UntrustedURLSessionDelegate: NSObject, URLSessionDelegate {
     func urlSession(
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge,
