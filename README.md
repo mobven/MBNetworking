@@ -2,6 +2,11 @@
 
 Networking is a design-pattern framework based on Apple's `URLSession`. It's evolved from the idea of replacing `Alamofire` (in some projects also `Moya`) with native `URLSession` functions.
 
+## Dependency Graph [draw.io](https://drive.google.com/file/d/1O2XLr_BN4XI7V8Wpdf2_9M_a9b6BmFaV/view?usp=sharing)
+<div align="center">
+  <img alt="Networking Dependency Graph" src="Documentation/dependency-graph.png">
+</div>
+
 ## Requirements
 
 - iOS 10.0+
