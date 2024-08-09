@@ -10,6 +10,7 @@ import XCTest
 @testable import MBNetworking
 @testable import MobKitCore
 
+// TODO: add NetworkingLegacyTests and separate NetworkingTests for async support.
 #if canImport(UIKit)
     class NetworkingTests: XCTestCase {
         override func setUp() {
@@ -28,7 +29,7 @@ import XCTest
                     if case let .success(actualData) = StubURLProtocol.result {
                         XCTAssertEqual(data, actualData)
                     }
-                    
+
                     image = UIImage(data: data)
                 }
             }
@@ -44,17 +45,17 @@ import XCTest
                 let result = try await Download.data(
                     url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
                 ).fetch(Data.self)
-                
+
                 if case let .success(actualData) = StubURLProtocol.result {
                     XCTAssertEqual(result, actualData)
                 }
-                
+
                 image = UIImage(data: result)
-            } catch let error {
+            } catch {
                 print(error.localizedDescription)
                 XCTFail()
             }
-            
+
             XCTAssertNotNil(image)
         }
     }
