@@ -34,7 +34,7 @@ final class Session {
     /// SSL certificate paths of `URLSessionDelegate`.
     var certificatePaths: [String] = [] {
         didSet {
-            (delegate as? URLSessionPinningDelegate)?.certificatePaths = certificatePaths
+            (delegate as? URLSessionPinningDelegateProtocol)?.certificatePaths = certificatePaths
         }
     }
 
@@ -56,7 +56,7 @@ final class Session {
 
     /// Configures networking to trust session authentication challenge, even if the certificate is not trusted.
     func setServerTrustedURLAuthenticationChallenge() {
-        delegate = UntrustedURLSessionDelegate()
+        delegate = createUntrustedURLSessionDelegate()
         session = URLSession(
             configuration: configuration,
             delegate: delegate,
@@ -65,7 +65,7 @@ final class Session {
     }
 
     required init() {
-        delegate = URLSessionPinningDelegate()
+        delegate = createURLSessionPinningDelegate()
         session = URLSession(
             configuration: configuration,
             delegate: delegate,
