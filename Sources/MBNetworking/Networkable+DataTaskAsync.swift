@@ -18,12 +18,7 @@ extension Networkable {
     ///   - type: Type of the result.
     /// - Returns: Response as `Result`
     public func fetch<V: Decodable>(_ type: V.Type) async throws -> V {
-        // StubURLProtocol enabled and adding a small delay.
-        if StubURLProtocol.isEnabled, ProcessInfo.isUnderTest {
-//            RunLoop.current.run(until: Date().addingTimeInterval(0.05))
-        }
-        
-        return try await fetch(request)
+        try await fetch(request)
     }
     
     private func fetch<V: Decodable>(_ urlRequest: URLRequest) async throws -> V {

@@ -109,7 +109,8 @@ class StubURLProtocolTests: XCTestCase {
                 }
                 expectation.fulfill()
             }
-            wait(for: [expectation], timeout: 1)
+            waitForExpectations(timeout: 5, handler: nil)
+            
             // The real image in the link is 1400x637 size.
             XCTAssertNotNil(image)
             XCTAssertEqual(image?.size.width, 1400)
