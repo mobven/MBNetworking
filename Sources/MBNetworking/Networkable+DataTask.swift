@@ -1,5 +1,5 @@
 //
-//  Network.swift
+//  Networkable+DataTask.swift
 //  Network
 //
 //  Created by Rasid Ramazanov on 25.11.2019.
@@ -23,24 +23,23 @@ extension Networkable {
         if StubURLProtocol.isEnabled, ProcessInfo.isUnderTest {
             RunLoop.current.run(until: Date().addingTimeInterval(0.05))
         }
-        
+
         fetch(request, completion: completion)
-        
     }
-    
+
     private func fetch<V: Decodable>(
         _ urlRequest: URLRequest,
         completion: @escaping ((Result<V, MBErrorKit.NetworkingError>) -> Void)
     ) {
         requestData(urlRequest) { response, data, error in
-            
+
             if let error = error,
                self.isNetworkConnectionError((error as NSError).code) {
                 let error = MBErrorKit.NetworkingError.networkConnectionError(error)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 self.printErrorLog(error)
                 completion(.failure(error))
-                
+
             } else if let error = error {
                 let networkingError: NetworkingError
                 if (error as NSError).code == NSURLErrorCancelled {
@@ -51,20 +50,20 @@ extension Networkable {
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: networkingError)
                 self.printErrorLog(networkingError)
                 completion(.failure(networkingError))
-                
+
             } else if let httpResponse = response as? HTTPURLResponse,
                       self.isSuccess(httpResponse.statusCode) {
                 let error = MBErrorKit.NetworkingError.httpError(error, httpResponse, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 self.printErrorLog(error)
                 completion(.failure(error))
-                
+
             } else if let response = response, data == nil || data?.count == 0 {
                 let error = MBErrorKit.NetworkingError.dataTaskError(response, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 self.printErrorLog(error)
                 completion(.failure(error))
-                
+
             } else if let data = data, !data.isEmpty {
                 do {
                     // If requested decodable type is Data, received data will be returned.
@@ -80,7 +79,7 @@ extension Networkable {
                     self.printErrorLog(error)
                     completion(.failure(error))
                 }
-                
+
             } else {
                 let error = MBErrorKit.NetworkingError.unkownError(error, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
@@ -89,18 +88,18 @@ extension Networkable {
             }
         }
     }
-    
+
     func isNetworkConnectionError(_ errorCode: Int) -> Bool {
         errorCode == NSURLErrorNetworkConnectionLost
-        || errorCode == NSURLErrorNotConnectedToInternet
-        || errorCode == NSURLErrorCannotConnectToHost
-        || errorCode == 53
+            || errorCode == NSURLErrorNotConnectedToInternet
+            || errorCode == NSURLErrorCannotConnectToHost
+            || errorCode == 53
     }
-    
+
     func isSuccess(_ errorCode: Int) -> Bool {
         !(200 ... 399).contains(errorCode)
     }
-    
+
     private func requestData(_ urlRequest: URLRequest, completion: @escaping ((URLResponse?, Data?, Error?) -> Void)) {
         let taskId = UUID().uuidString
         let task = Session.shared.session
@@ -111,9 +110,9 @@ extension Networkable {
                     }
                     Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
                 }
-                
+
                 Session.shared.tasksInProgress.removeValue(forKey: taskId)
-                
+
                 self.printResponse(data)
                 DispatchQueue.main.async {
                     completion(response, data, error)

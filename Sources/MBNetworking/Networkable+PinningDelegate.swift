@@ -29,7 +29,7 @@ extension URLSessionPinningDelegateProtocol {
 
 class URLSessionPinningDelegateLegacy: NSObject, URLSessionPinningDelegateProtocol {
     var certificatePaths: [String] = []
-    
+
     func urlSession(
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge,
@@ -39,9 +39,12 @@ class URLSessionPinningDelegateLegacy: NSObject, URLSessionPinningDelegateProtoc
             completionHandler(.cancelAuthenticationChallenge, nil)
             return
         }
-        
-        let disposition = URLSessionPinningHelper.handleChallengeCommon(certificatePaths: certificatePaths, 
-                                                                        serverCertificate: serverCertificate)
+
+        let disposition = URLSessionPinningHelper.handleChallengeCommon(
+            certificatePaths: certificatePaths,
+
+            serverCertificate: serverCertificate
+        )
         if disposition == .useCredential {
             completionHandler(disposition, URLCredential(trust: serverCertificate.trust))
         } else {
@@ -50,11 +53,9 @@ class URLSessionPinningDelegateLegacy: NSObject, URLSessionPinningDelegateProtoc
     }
 }
 
-
-@available(iOS 13.0, *)
-class URLSessionPinningDelegateAsync: NSObject, URLSessionPinningDelegateProtocol {
+@available(iOS 13.0, *) class URLSessionPinningDelegateAsync: NSObject, URLSessionPinningDelegateProtocol {
     var certificatePaths: [String] = []
-    
+
     func urlSession(
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge
@@ -62,8 +63,11 @@ class URLSessionPinningDelegateAsync: NSObject, URLSessionPinningDelegateProtoco
         guard let serverCertificate = URLSessionPinningHelper.getServerCertificate(forChallenge: challenge) else {
             return (.cancelAuthenticationChallenge, nil)
         }
-        
-        let disposition = URLSessionPinningHelper.handleChallengeCommon(certificatePaths: certificatePaths, serverCertificate: serverCertificate)
+
+        let disposition = URLSessionPinningHelper.handleChallengeCommon(
+            certificatePaths: certificatePaths,
+            serverCertificate: serverCertificate
+        )
         if disposition == .useCredential {
             return (disposition, URLCredential(trust: serverCertificate.trust))
         } else {
@@ -84,11 +88,11 @@ private class URLSessionPinningHelper {
         else {
             return nil
         }
-        
+
         let serverCertificateData = SecCertificateCopyData(serverCertificate)
         return (serverCertificateData, serverTrust)
     }
-    
+
     static func handleChallengeCommon(
         certificatePaths: [String],
         serverCertificate: (data: CFData, trust: SecTrust)
@@ -103,7 +107,7 @@ private class URLSessionPinningHelper {
                 }
             }
         }
-        
+
         if certificatePaths.isEmpty {
             return .performDefaultHandling
         } else {

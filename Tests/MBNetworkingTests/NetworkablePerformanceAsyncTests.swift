@@ -7,130 +7,128 @@
 //
 
 #if canImport(UIKit)
-import Foundation
-import UIKit
-import XCTest
-@testable import MBErrorKit
-@testable import MBNetworking
-@testable import MobKitCore
+    import Foundation
+    import UIKit
+    import XCTest
+    @testable import MBErrorKit
+    @testable import MBNetworking
+    @testable import MobKitCore
 
-class NetworkablePerformanceAsyncTests: XCTestCase {
-    var imageView: UIImageView = .init()
-    
-    override func setUp() {
-        MobKit.isDeveloperModeOn = true
-        NetworkableConfigs.default.set(configuration: URLSessionConfiguration.ephemeral)
-    }
-    
-    func testWhenMultipleDownloadCommandCalled() async throws {
-        let expectation = XCTestExpectation(description: "wait for image")
-        
-        for i in 0 ..< 100 {
-            try await downloadImage(index: i)
-            expectation.fulfill()
-            
+    class NetworkablePerformanceAsyncTests: XCTestCase {
+        var imageView: UIImageView = .init()
+
+        override func setUp() {
+            MobKit.isDeveloperModeOn = true
+            NetworkableConfigs.default.set(configuration: URLSessionConfiguration.ephemeral)
         }
-        
-        await fulfillment(of: [expectation], timeout: 10)
-    }
-    
-    private func downloadImage(index: Int) async throws {
-        try await imageView.downloadImageFrom(index: index)
-    }
-}
 
-extension UIImageView {
-    func downloadImageFrom(index: Int) async throws {
-        if let savedImage = FileIOManager.readFile("\(index)"),
-           let image = UIImage(data: savedImage) {
+        func testWhenMultipleDownloadCommandCalled() async throws {
+            let expectation = XCTestExpectation(description: "wait for image")
+
+            for i in 0 ..< 100 {
+                try await downloadImage(index: i)
+                expectation.fulfill()
+            }
+
+            await fulfillment(of: [expectation], timeout: 10)
+        }
+
+        private func downloadImage(index: Int) async throws {
+            try await imageView.downloadImageFrom(index: index)
+        }
+    }
+
+    extension UIImageView {
+        func downloadImageFrom(index: Int) async throws {
+            if let savedImage = FileIOManager.readFile("\(index)"),
+               let image = UIImage(data: savedImage) {
+                self.image = image
+                return
+            }
+
+            let data = try await getProfilePhoto()
+
+            image = UIImage(named: "ky_avatar")
+            let image = UIImage(data: data)
             self.image = image
-            return
+            FileIOManager.writeFile("\(index)", content: data)
         }
-        
-        let data = try await getProfilePhoto()
-        
-        image = UIImage(named: "ky_avatar")
-        let image = UIImage(data: data)
-        self.image = image
-        FileIOManager.writeFile("\(index)", content: data)
-    }
-    
-    private func getProfilePhoto() async throws -> Data {
-        try await API.getProfilePhoto.fetch(Data.self)
-    }
-}
 
-enum API: Networkable {
-    case getProfilePhoto
-    
-    var request: URLRequest {
-        URLRequest(url: URL(forceString: "https://picsum.photos/200/300"))
+        private func getProfilePhoto() async throws -> Data {
+            try await API.getProfilePhoto.fetch(Data.self)
+        }
     }
-}
 
-enum UIImageManager {
-    static func convertImageToBase64String(img: UIImage) -> String {
-        img.pngData()?.base64EncodedString() ?? ""
-    }
-    
-    static func convertBase64StringToImage(data: Data) -> UIImage? {
-        UIImage(data: data)
-    }
-}
+    enum API: Networkable {
+        case getProfilePhoto
 
-enum FileIOManager {
-    private static let localDirectory = "kutup_pp"
-    
-    @discardableResult static func writeFile(_ fileName: String, content: Data) -> Bool {
-        guard let directory = getFileDirectory() else {
-            return false
-        }
-        guard createDirectoryIfNeeded(directory) else {
-            return false
-        }
-        let fileURL = directory.appendingPathComponent(fileName)
-        do {
-            try content.write(to: fileURL, options: .atomic)
-            return true
-        } catch {
-            return false
+        var request: URLRequest {
+            URLRequest(url: URL(forceString: "https://picsum.photos/200/300"))
         }
     }
-    
-    private static func createDirectoryIfNeeded(_ directory: URL) -> Bool {
-        guard !FileManager.default.fileExists(atPath: directory.absoluteString) else {
-            // Directory exists, no need to recreate it.
-            return true
+
+    enum UIImageManager {
+        static func convertImageToBase64String(img: UIImage) -> String {
+            img.pngData()?.base64EncodedString() ?? ""
         }
-        do {
-            try FileManager.default.createDirectory(
-                at: directory, withIntermediateDirectories: true, attributes: nil
-            )
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
+
+        static func convertBase64StringToImage(data: Data) -> UIImage? {
+            UIImage(data: data)
         }
     }
-    
-    static func readFile(_ fileName: String) -> Data? {
-        guard let directory = getFileDirectory() else {
-            return nil
+
+    enum FileIOManager {
+        private static let localDirectory = "kutup_pp"
+
+        @discardableResult static func writeFile(_ fileName: String, content: Data) -> Bool {
+            guard let directory = getFileDirectory() else {
+                return false
+            }
+            guard createDirectoryIfNeeded(directory) else {
+                return false
+            }
+            let fileURL = directory.appendingPathComponent(fileName)
+            do {
+                try content.write(to: fileURL, options: .atomic)
+                return true
+            } catch {
+                return false
+            }
         }
-        let fileURL = directory.appendingPathComponent(fileName)
-        do {
-            return try Data(contentsOf: fileURL)
-        } catch {
-            return nil
+
+        private static func createDirectoryIfNeeded(_ directory: URL) -> Bool {
+            guard !FileManager.default.fileExists(atPath: directory.absoluteString) else {
+                // Directory exists, no need to recreate it.
+                return true
+            }
+            do {
+                try FileManager.default.createDirectory(
+                    at: directory, withIntermediateDirectories: true, attributes: nil
+                )
+                return true
+            } catch {
+                print(error.localizedDescription)
+                return false
+            }
+        }
+
+        static func readFile(_ fileName: String) -> Data? {
+            guard let directory = getFileDirectory() else {
+                return nil
+            }
+            let fileURL = directory.appendingPathComponent(fileName)
+            do {
+                return try Data(contentsOf: fileURL)
+            } catch {
+                return nil
+            }
+        }
+
+        private static func getFileDirectory() -> URL? {
+            guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+                return nil
+            }
+            return directory.appendingPathComponent(localDirectory, isDirectory: true)
         }
     }
-    
-    private static func getFileDirectory() -> URL? {
-        guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return nil
-        }
-        return directory.appendingPathComponent(localDirectory, isDirectory: true)
-    }
-}
 #endif
-

@@ -10,7 +10,6 @@ import Foundation
 
 /// Multipart body file
 public struct File {
-    
     /// Key of multipart form data.
     public var name: String
     /// File name
@@ -51,5 +50,4 @@ public struct File {
         self.mimeType = mimeType
         self.data = data
     }
-    
 }

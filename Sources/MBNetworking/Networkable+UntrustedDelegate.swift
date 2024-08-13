@@ -16,8 +16,7 @@ func createUntrustedURLSessionDelegate() -> URLSessionDelegate {
     }
 }
 
-@available(iOS 13.0, *)
-class UntrustedURLSessionDelegateAsync: NSObject, URLSessionDelegate {
+@available(iOS 13.0, *) class UntrustedURLSessionDelegateAsync: NSObject, URLSessionDelegate {
     func urlSession(
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge
@@ -25,7 +24,6 @@ class UntrustedURLSessionDelegateAsync: NSObject, URLSessionDelegate {
         return (.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
     }
 }
-
 
 class UntrustedURLSessionDelegateLegacy: NSObject, URLSessionDelegate {
     func urlSession(

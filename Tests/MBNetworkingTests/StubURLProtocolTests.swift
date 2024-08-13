@@ -57,14 +57,14 @@ class StubURLProtocolTests: XCTestCase {
         StubURLProtocol.result = .getData(from: Bundle.module.url(forResource: "results", withExtension: "json"))
         var response: DecodableTrue?
         let expectation = expectation(description: "wait for delay")
-        
+
         Download.data(
             url: URL(forceString: "https://miro.medium.com/max/1400/1*2AodTHXf8giVb4QoIBGSww.png")
         ).fetch(DecodableTrue.self) { result in
             if case let .success(resp) = result {
                 response = resp
             }
-            
+
             expectation.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)
@@ -87,7 +87,7 @@ class StubURLProtocolTests: XCTestCase {
                 if case let .success(data) = result {
                     image = UIImage(data: data)
                 }
-                
+
                 expectation.fulfill()
             }
             waitForExpectations(timeout: 5, handler: nil)
@@ -110,7 +110,7 @@ class StubURLProtocolTests: XCTestCase {
                 expectation.fulfill()
             }
             waitForExpectations(timeout: 5, handler: nil)
-            
+
             // The real image in the link is 1400x637 size.
             XCTAssertNotNil(image)
             XCTAssertEqual(image?.size.width, 1400)
