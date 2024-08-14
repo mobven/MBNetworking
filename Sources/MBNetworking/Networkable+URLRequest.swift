@@ -48,9 +48,9 @@ public extension Networkable {
      - parameter httpMethod:  HTTP method. (DELETE, POST, PUT)
      - returns: `URLRequest` with specified url and encodable body object.
      */
-    func getRequest<T: Encodable>(
+    func getRequest(
         url: URL,
-        encodable data: T,
+        encodable data: some Encodable,
         headers: [String: String] = [:],
         httpMethod: RequestType = .POST
     ) -> URLRequest {
@@ -196,9 +196,9 @@ public enum NetworkContentType {
 
     var rawValue: String {
         switch self {
-        case .json: return "application/json"
-        case .urlencoded: return "application/x-www-form-urlencoded"
-        case let .multipartFormData(boundary): return "multipart/form-data; boundary=\(boundary)"
+        case .json: "application/json"
+        case .urlencoded: "application/x-www-form-urlencoded"
+        case let .multipartFormData(boundary): "multipart/form-data; boundary=\(boundary)"
         }
     }
 }

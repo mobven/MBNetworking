@@ -10,9 +10,9 @@ import Foundation
 
 func createUntrustedURLSessionDelegate() -> URLSessionDelegate {
     if #available(iOS 13.0, *) {
-        return UntrustedURLSessionDelegateAsync()
+        UntrustedURLSessionDelegateAsync()
     } else {
-        return UntrustedURLSessionDelegateLegacy()
+        UntrustedURLSessionDelegateLegacy()
     }
 }
 
@@ -21,7 +21,7 @@ func createUntrustedURLSessionDelegate() -> URLSessionDelegate {
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge
     ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
-        return (.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
+        (.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
     }
 }
 

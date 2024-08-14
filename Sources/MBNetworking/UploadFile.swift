@@ -22,7 +22,7 @@ public struct File {
     public var data: Data
 
     var fileNameWithExtension: String {
-        var fileName = self.fileName
+        var fileName = fileName
         if !fileExtension.isEmpty {
             fileName.append(".")
             fileName.append(fileExtension)

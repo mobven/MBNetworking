@@ -23,19 +23,18 @@ import MBErrorKit
     private func fetch<V: Decodable>(_ urlRequest: URLRequest) async throws -> V {
         let (response, data, error) = await requestData(urlRequest)
 
-        if let error = error,
+        if let error,
            isNetworkConnectionError((error as NSError).code) {
             let error = MBErrorKit.NetworkingError.networkConnectionError(error)
             MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
             printErrorLog(error)
             throw error
 
-        } else if let error = error {
-            let networkingError: NetworkingError
-            if (error as NSError).code == NSURLErrorCancelled {
-                networkingError = .dataTaskCancelled
+        } else if let error {
+            let networkingError: NetworkingError = if (error as NSError).code == NSURLErrorCancelled {
+                .dataTaskCancelled
             } else {
-                networkingError = MBErrorKit.NetworkingError.underlyingError(error, response, data)
+                MBErrorKit.NetworkingError.underlyingError(error, response, data)
             }
             MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: networkingError)
             printErrorLog(networkingError)
@@ -48,13 +47,13 @@ import MBErrorKit
             printErrorLog(error)
             throw error
 
-        } else if let response = response, data == nil || data?.count == 0 {
+        } else if let response, data == nil || data?.count == 0 {
             let error = MBErrorKit.NetworkingError.dataTaskError(response, data)
             MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
             printErrorLog(error)
             throw error
 
-        } else if let data = data, data.count > 0 {
+        } else if let data, data.count > 0 {
             do {
                 // If requested decodable type is Data, received data will be returned.
                 if V.Type.self == Data.Type.self {

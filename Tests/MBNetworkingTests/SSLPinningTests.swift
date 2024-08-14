@@ -63,7 +63,7 @@ class SSLPinningTests: XCTestCase {
             public var request: URLRequest {
                 switch self {
                 case let .sendToken(request):
-                    return getRequest(
+                    getRequest(
                         url: URL(forceString: "https://api.macfit.com.tr/api/auth/sendToken"),
                         encodable: request,
                         headers: API.getHeaders()

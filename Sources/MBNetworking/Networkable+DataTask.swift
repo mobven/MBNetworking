@@ -33,19 +33,18 @@ extension Networkable {
     ) {
         requestData(urlRequest) { response, data, error in
 
-            if let error = error,
+            if let error,
                self.isNetworkConnectionError((error as NSError).code) {
                 let error = MBErrorKit.NetworkingError.networkConnectionError(error)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 self.printErrorLog(error)
                 completion(.failure(error))
 
-            } else if let error = error {
-                let networkingError: NetworkingError
-                if (error as NSError).code == NSURLErrorCancelled {
-                    networkingError = .dataTaskCancelled
+            } else if let error {
+                let networkingError: NetworkingError = if (error as NSError).code == NSURLErrorCancelled {
+                    .dataTaskCancelled
                 } else {
-                    networkingError = MBErrorKit.NetworkingError.underlyingError(error, response, data)
+                    MBErrorKit.NetworkingError.underlyingError(error, response, data)
                 }
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: networkingError)
                 self.printErrorLog(networkingError)
@@ -58,13 +57,13 @@ extension Networkable {
                 self.printErrorLog(error)
                 completion(.failure(error))
 
-            } else if let response = response, data == nil || data?.count == 0 {
+            } else if let response, data == nil || data?.count == 0 {
                 let error = MBErrorKit.NetworkingError.dataTaskError(response, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 self.printErrorLog(error)
                 completion(.failure(error))
 
-            } else if let data = data, !data.isEmpty {
+            } else if let data, !data.isEmpty {
                 do {
                     // If requested decodable type is Data, received data will be returned.
                     if V.Type.self == Data.Type.self {

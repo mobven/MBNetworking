@@ -11,7 +11,7 @@ import Foundation
 final class Session {
     static var instance: Session?
     static var shared: Session {
-        guard let instance = instance else {
+        guard let instance else {
             self.instance = Session()
             return self.instance!
         }

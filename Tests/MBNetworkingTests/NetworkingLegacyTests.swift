@@ -50,7 +50,7 @@ enum Download: Networkable {
     var request: URLRequest {
         switch self {
         case let .data(url):
-            return getRequest(url: url, queryItems: [:])
+            getRequest(url: url, queryItems: [:])
         }
     }
 }

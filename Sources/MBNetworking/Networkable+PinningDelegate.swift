@@ -15,9 +15,9 @@ protocol URLSessionPinningDelegateProtocol: URLSessionDelegate {
 
 func createURLSessionPinningDelegate() -> URLSessionPinningDelegateProtocol {
     if #available(iOS 13.0, *) {
-        return URLSessionPinningDelegateAsync()
+        URLSessionPinningDelegateAsync()
     } else {
-        return URLSessionPinningDelegateLegacy()
+        URLSessionPinningDelegateLegacy()
     }
 }
 

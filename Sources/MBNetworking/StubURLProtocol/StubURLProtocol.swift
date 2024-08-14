@@ -29,57 +29,57 @@ public final class StubURLProtocol: URLProtocol {
     public static var delay: TimeInterval = 0
 
     static var isEnabled: Bool {
-        return result != nil
+        result != nil
     }
 }
 
 public extension StubURLProtocol {
     override class func canInit(with request: URLRequest) -> Bool {
-        return isEnabled
+        isEnabled
     }
 
     override class func canInit(with task: URLSessionTask) -> Bool {
-        return isEnabled
+        isEnabled
     }
 
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        return request
+        request
     }
 
     override func startLoading() {
         Timer.scheduledTimer(withTimeInterval: StubURLProtocol.delay, repeats: false) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             guard let result = StubURLProtocol.result else {
-                self.client?.urlProtocolDidFinishLoading(self)
+                client?.urlProtocolDidFinishLoading(self)
                 return
             }
 
             switch result {
             case let .success(data):
-                self.client?.urlProtocol(self, didLoad: data)
+                client?.urlProtocol(self, didLoad: data)
 
                 if let url = request.url,
                    let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil) {
-                    self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .allowed)
+                    client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .allowed)
                 }
             case let .failure(error):
-                self.client?.urlProtocol(self, didFailWithError: error)
+                client?.urlProtocol(self, didFailWithError: error)
             case let .failureStatusCode(statusCode):
-                if let url = self.request.url,
+                if let url = request.url,
                    let response = HTTPURLResponse(
                        url: url,
                        statusCode: statusCode,
                        httpVersion: nil,
                        headerFields: nil
                    ) {
-                    self.client?.urlProtocol(
+                    client?.urlProtocol(
                         self,
                         cachedResponseIsValid: CachedURLResponse(response: response, data: Data())
                     )
                 }
             }
 
-            self.client?.urlProtocolDidFinishLoading(self)
+            client?.urlProtocolDidFinishLoading(self)
         }
     }
 
