@@ -36,7 +36,6 @@ class NetworkableTasksTests: XCTestCase {
     }
 
     func testSessionQueueHasRemovedDataTask_WhenTaskIsFinished() {
-        // TODO: test whether it's a bug in task queue or not?
         let expectation = XCTestExpectation(description: "waiting for image")
         makeACall(expectation)
         XCTAssertEqual(Session.shared.tasksInProgress.count, 1)

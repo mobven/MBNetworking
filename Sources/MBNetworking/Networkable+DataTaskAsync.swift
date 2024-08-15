@@ -78,20 +78,22 @@ import MBErrorKit
 
     private func requestData(_ urlRequest: URLRequest) async -> (URLResponse?, Data?, Error?) {
         let taskId = UUID().uuidString
+
+        let task = Session.shared.session.dataTask(with: urlRequest)
+        Session.shared.tasksInProgress[taskId] = task
+
         do {
             let (data, response) = try await Session.shared.session.data(for: urlRequest)
 
-            if let task = Session.shared.tasksInProgress[taskId] {
-                Session.shared.networkLogMonitoringDelegate?.logDataTask(dataTask: task, didReceive: data)
-                Self.finalizeTask(withId: taskId, task: task)
-            }
+            Session.shared.networkLogMonitoringDelegate?.logDataTask(dataTask: task, didReceive: data)
+            Self.finalizeTask(withId: taskId, task: task)
             printResponse(data)
+
             return (response, data, nil)
         } catch {
-            if let task = Session.shared.tasksInProgress[taskId] {
-                Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
-                Self.finalizeTask(withId: taskId, task: task)
-            }
+            Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
+            Self.finalizeTask(withId: taskId, task: task)
+
             return (nil, nil, error)
         }
     }
