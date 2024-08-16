@@ -75,33 +75,34 @@ import MBErrorKit
             throw error
         }
     }
-
+    
     private func requestData(_ urlRequest: URLRequest) async -> (URLResponse?, Data?, Error?) {
         let taskId = UUID().uuidString
-
         let task = Session.shared.session.dataTask(with: urlRequest)
-        Session.shared.tasksInProgress[taskId] = task
-
+        
+        Session.shared.networkLogMonitoringDelegate?.logTaskCreated(task: task)
+        task.resume()
+        Session.shared.tasksInProgress.updateValue(task, forKey: taskId)
+        
+        defer {
+            Session.shared.tasksInProgress.removeValue(forKey: taskId)
+        }
+        
         do {
             let (data, response) = try await Session.shared.session.data(for: urlRequest)
-
-            Session.shared.networkLogMonitoringDelegate?.logDataTask(dataTask: task, didReceive: data)
-            Self.finalizeTask(withId: taskId, task: task)
-            printResponse(data)
-
+            
+            if let task = Session.shared.tasksInProgress[taskId] {
+                Session.shared.networkLogMonitoringDelegate?.logDataTask(dataTask: task, didReceive: data)
+                Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: nil)
+            }
+            
+            self.printResponse(data)
             return (response, data, nil)
         } catch {
-            Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
-            Self.finalizeTask(withId: taskId, task: task)
-
+            if let task = Session.shared.tasksInProgress[taskId] {
+                Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
+            }
             return (nil, nil, error)
         }
-    }
-
-    private static func finalizeTask(withId taskId: String, task: URLSessionDataTask) {
-        Session.shared.tasksInProgress.removeValue(forKey: taskId)
-
-        Session.shared.networkLogMonitoringDelegate?.logTaskCreated(task: task)
-        Session.shared.tasksInProgress.updateValue(task, forKey: taskId)
     }
 }
