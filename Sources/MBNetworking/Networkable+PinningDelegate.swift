@@ -13,11 +13,13 @@ protocol URLSessionPinningDelegateProtocol: URLSessionDelegate {
     var certificatePaths: [String] { get set }
 }
 
-func createURLSessionPinningDelegate() -> URLSessionPinningDelegateProtocol {
-    if #available(iOS 13.0, *) {
-        URLSessionPinningDelegateAsync()
-    } else {
-        URLSessionPinningDelegateLegacy()
+enum URLSessionPinningComposer {
+    static func createDelegate() -> URLSessionPinningDelegateProtocol {
+        if #available(iOS 13.0, *) {
+            return URLSessionPinningDelegateAsync()
+        } else {
+            return URLSessionPinningDelegateLegacy()
+        }
     }
 }
 

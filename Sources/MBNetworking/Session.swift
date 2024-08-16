@@ -56,7 +56,7 @@ final class Session {
 
     /// Configures networking to trust session authentication challenge, even if the certificate is not trusted.
     func setServerTrustedURLAuthenticationChallenge() {
-        delegate = createUntrustedURLSessionDelegate()
+        delegate = UntrustedURLSessionComposer.createDelegate()
         session = URLSession(
             configuration: configuration,
             delegate: delegate,
@@ -65,7 +65,7 @@ final class Session {
     }
 
     required init() {
-        delegate = createURLSessionPinningDelegate()
+        delegate = URLSessionPinningComposer.createDelegate()
         session = URLSession(
             configuration: configuration,
             delegate: delegate,

@@ -8,11 +8,13 @@
 
 import Foundation
 
-func createUntrustedURLSessionDelegate() -> URLSessionDelegate {
-    if #available(iOS 13.0, *) {
-        UntrustedURLSessionDelegateAsync()
-    } else {
-        UntrustedURLSessionDelegateLegacy()
+enum UntrustedURLSessionComposer {
+    static func createDelegate() -> URLSessionDelegate {
+        if #available(iOS 13.0, *) {
+            return UntrustedURLSessionDelegateAsync()
+        } else {
+            return UntrustedURLSessionDelegateLegacy()
+        }
     }
 }
 
