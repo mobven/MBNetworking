@@ -19,12 +19,12 @@ extension Networkable {
         _ type: V.Type,
         completion: @escaping ((Result<V, MBErrorKit.NetworkingError>) -> Void)
     ) {
+        fetch(request, completion: completion)
+
         // StubURLProtocol enabled and adding a small delay.
         if StubURLProtocol.isEnabled, ProcessInfo.isUnderTest {
             RunLoop.current.run(until: Date().addingTimeInterval(0.05))
         }
-
-        fetch(request, completion: completion)
     }
 
     private func fetch<V: Decodable>(

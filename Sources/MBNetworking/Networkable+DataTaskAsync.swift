@@ -77,32 +77,32 @@ import MBErrorKit
     }
     
     private func requestData(_ urlRequest: URLRequest) async -> (URLResponse?, Data?, Error?) {
-        let taskId = UUID().uuidString
-        let task = Session.shared.session.dataTask(with: urlRequest)
-        
-        Session.shared.networkLogMonitoringDelegate?.logTaskCreated(task: task)
-        task.resume()
-        Session.shared.tasksInProgress.updateValue(task, forKey: taskId)
-        
-        defer {
-            Session.shared.tasksInProgress.removeValue(forKey: taskId)
-        }
+        // TODO: Handle Async flow
+//        let taskId = UUID().uuidString
+//        let task = Session.shared.session.dataTask(with: urlRequest)
         
         do {
             let (data, response) = try await Session.shared.session.data(for: urlRequest)
             
-            if let task = Session.shared.tasksInProgress[taskId] {
-                Session.shared.networkLogMonitoringDelegate?.logDataTask(dataTask: task, didReceive: data)
-                Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: nil)
-            }
+            // TODO: Handle Async flow
+//            Session.shared.networkLogMonitoringDelegate?.logDataTask(dataTask: task, didReceive: data)
+//            Session.shared.tasksInProgress.removeValue(forKey: taskId)
+            
             
             self.printResponse(data)
             return (response, data, nil)
         } catch {
-            if let task = Session.shared.tasksInProgress[taskId] {
-                Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
-            }
+//            if let task = Session.shared.tasksInProgress[taskId] {
+//                Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
+//            }
+//            Session.shared.tasksInProgress.removeValue(forKey: taskId)
+            
             return (nil, nil, error)
         }
+        
+        // TODO: Handle Async flow
+//        Session.shared.networkLogMonitoringDelegate?.logTaskCreated(task: task)
+//        task.resume()
+//        Session.shared.tasksInProgress.updateValue(task, forKey: taskId)
     }
 }

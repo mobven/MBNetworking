@@ -24,15 +24,19 @@ class NetworkableTasksTests: XCTestCase {
     }
 
     func testSessionQueueHasDataTask_WhenFetchCalled() {
-        makeACall()
+        let expectation = XCTestExpectation(description: "waiting for image")
+        makeACall(expectation)
         XCTAssertEqual(Session.shared.tasksInProgress.count, 1)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testSessionQueueHasDataTaskWhenFetchCalledMultipleTimes() {
+        let expectation = XCTestExpectation(description: "waiting for image")
         for _ in 0 ... 3 {
-            makeACall()
+            makeACall(expectation)
         }
         XCTAssertEqual(Session.shared.tasksInProgress.count, 4)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testSessionQueueHasRemovedDataTask_WhenTaskIsFinished() {
