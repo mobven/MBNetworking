@@ -9,10 +9,8 @@
 import Foundation
 
 extension ProcessInfo {
-
     /// Returns true if process is in testing.
     static var isUnderTest: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
-
 }

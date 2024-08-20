@@ -10,7 +10,6 @@ import Foundation
 
 /// Multipart body file
 public struct File {
-    
     /// Key of multipart form data.
     public var name: String
     /// File name
@@ -23,7 +22,7 @@ public struct File {
     public var data: Data
 
     var fileNameWithExtension: String {
-        var fileName = self.fileName
+        var fileName = fileName
         if !fileExtension.isEmpty {
             fileName.append(".")
             fileName.append(fileExtension)
@@ -51,5 +50,4 @@ public struct File {
         self.mimeType = mimeType
         self.data = data
     }
-    
 }

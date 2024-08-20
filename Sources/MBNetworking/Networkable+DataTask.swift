@@ -1,5 +1,5 @@
 //
-//  Network.swift
+//  Networkable+DataTask.swift
 //  Network
 //
 //  Created by Rasid Ramazanov on 25.11.2019.
@@ -19,12 +19,11 @@ extension Networkable {
         _ type: V.Type,
         completion: @escaping ((Result<V, MBErrorKit.NetworkingError>) -> Void)
     ) {
+        fetch(request, completion: completion)
+
         // StubURLProtocol enabled and adding a small delay.
         if StubURLProtocol.isEnabled, ProcessInfo.isUnderTest {
-            fetch(request, completion: completion)
             RunLoop.current.run(until: Date().addingTimeInterval(0.05))
-        } else {
-            fetch(request, completion: completion)
         }
     }
 
@@ -34,19 +33,18 @@ extension Networkable {
     ) {
         requestData(urlRequest) { response, data, error in
 
-            if let error = error,
+            if let error,
                self.isNetworkConnectionError((error as NSError).code) {
                 let error = MBErrorKit.NetworkingError.networkConnectionError(error)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 self.printErrorLog(error)
                 completion(.failure(error))
 
-            } else if let error = error {
-                let networkingError: NetworkingError
-                if (error as NSError).code == NSURLErrorCancelled {
-                    networkingError = .dataTaskCancelled
+            } else if let error {
+                let networkingError: NetworkingError = if (error as NSError).code == NSURLErrorCancelled {
+                    .dataTaskCancelled
                 } else {
-                    networkingError = MBErrorKit.NetworkingError.underlyingError(error, response, data)
+                    MBErrorKit.NetworkingError.underlyingError(error, response, data)
                 }
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: networkingError)
                 self.printErrorLog(networkingError)
@@ -59,13 +57,13 @@ extension Networkable {
                 self.printErrorLog(error)
                 completion(.failure(error))
 
-            } else if let response = response, data == nil || data?.count == 0 {
+            } else if let response, data == nil || data?.count == 0 {
                 let error = MBErrorKit.NetworkingError.dataTaskError(response, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 self.printErrorLog(error)
                 completion(.failure(error))
 
-            } else if let data = data, data.count > 0 {
+            } else if let data, !data.isEmpty {
                 do {
                     // If requested decodable type is Data, received data will be returned.
                     if V.Type.self == Data.Type.self {
@@ -111,9 +109,9 @@ extension Networkable {
                     }
                     Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
                 }
-                
+
                 Session.shared.tasksInProgress.removeValue(forKey: taskId)
-                
+
                 self.printResponse(data)
                 DispatchQueue.main.async {
                     completion(response, data, error)

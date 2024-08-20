@@ -1,5 +1,5 @@
 //
-//  NetworkEndpoint.swift
+//  Networkable.swift
 //  Networking
 //
 //  Created by Rasid Ramazanov on 25.11.2019.

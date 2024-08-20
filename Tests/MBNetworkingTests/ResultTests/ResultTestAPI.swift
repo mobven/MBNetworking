@@ -10,14 +10,12 @@ import Foundation
 @testable import MBNetworking
 
 enum ResultTestAPI: Networkable {
-    
     case fetch
     case underlyingError
     case httpError
-    
+
     var request: URLRequest {
         switch self {
-            
         case .fetch:
             let url = URL(forceString: "https://itunes.apple.com/search")
             return getRequest(url: url, queryItems: ["media": "music"])
@@ -28,7 +26,5 @@ enum ResultTestAPI: Networkable {
             let url = URL(forceString: "https://itunes.apple.com/search")
             return getRequest(url: url, queryItems: ["media": "0"])
         }
-        
     }
-    
 }

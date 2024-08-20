@@ -11,7 +11,7 @@ import Foundation
 final class Session {
     static var instance: Session?
     static var shared: Session {
-        guard let instance = instance else {
+        guard let instance else {
             self.instance = Session()
             return self.instance!
         }
@@ -34,7 +34,7 @@ final class Session {
     /// SSL certificate paths of `URLSessionDelegate`.
     var certificatePaths: [String] = [] {
         didSet {
-            (delegate as? URLSessionPinningDelegate)?.certificatePaths = certificatePaths
+            (delegate as? URLSessionPinningDelegateProtocol)?.certificatePaths = certificatePaths
         }
     }
 
@@ -49,14 +49,14 @@ final class Session {
             )
         }
     }
-    
+
     /// `NetworkLogMonitoringDelegate` that used for network log monitoring.
     /// Default value is `nil`.
     var networkLogMonitoringDelegate: NetworkLogMonitoringDelegate?
 
     /// Configures networking to trust session authentication challenge, even if the certificate is not trusted.
     func setServerTrustedURLAuthenticationChallenge() {
-        delegate = UntrustedURLSessionDelegate()
+        delegate = UntrustedURLSessionComposer.createDelegate()
         session = URLSession(
             configuration: configuration,
             delegate: delegate,
@@ -65,7 +65,7 @@ final class Session {
     }
 
     required init() {
-        delegate = URLSessionPinningDelegate()
+        delegate = URLSessionPinningComposer.createDelegate()
         session = URLSession(
             configuration: configuration,
             delegate: delegate,

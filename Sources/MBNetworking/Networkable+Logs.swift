@@ -54,7 +54,7 @@ extension Networkable {
     }
 
     private func getStringFrom(_ data: Data?) -> String {
-        if let data = data {
+        if let data {
             if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
                !(jsonObject is NSNull),
                let json = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
