@@ -64,6 +64,8 @@ final class Session {
         )
     }
     
+    /// Configures networking to trust session authentication challenge with passed URLSessionDelegate.
+    /// - parameter challenge : URLSessionDelegate
     func setServerTrustedAuthenticationChallenge(_ challenge: URLSessionDelegate) {
         delegate = challenge
         session = URLSession(
