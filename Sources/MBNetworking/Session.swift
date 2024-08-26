@@ -34,7 +34,7 @@ final class Session {
     /// SSL certificate paths of `URLSessionDelegate`.
     var certificatePaths: [String] = [] {
         didSet {
-            (delegate as? URLSessionPinningDelegate)?.certificatePaths = certificatePaths
+            (delegate as? PinnableSessionDelegate)?.certificatePaths = certificatePaths
         }
     }
 
@@ -62,6 +62,14 @@ final class Session {
             delegate: delegate,
             delegateQueue: nil
         )
+    }
+    
+    func setServerTrustedAuthenticationChallenge(_ challenge: URLSessionDelegate) {
+        delegate = challenge
+        session = URLSession(
+            configuration: configuration,
+            delegate: delegate,
+            delegateQueue: nil)
     }
 
     required init() {
