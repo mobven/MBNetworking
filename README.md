@@ -205,7 +205,14 @@ Networking allows to set `URLSessionConfiguration` through its `NetworkableConfi
 ```swift
 NetworkableConfigs.default.set(configuration: .ephemeral)
 ```
+### Setting Custom URLSessionDelegate as PinnableSessionDelegate
 
+Networking supports custom URLSessionDelegate as PinnableSessionDelegate.
+
+* parameter challenge: PinnableSessionDelegate: The PinnableSessionDelegate protocol conforms to the URLSessionDelegate protocol. 
+```swift
+public func setServerTrustedAuthenticationChallenge(_ challenge: PinnableSessionDelegate) 
+```
 
 ### What's next
 - [ ] Async/await support with Swift 5.5
