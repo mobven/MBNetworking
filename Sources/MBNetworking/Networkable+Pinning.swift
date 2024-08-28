@@ -9,7 +9,11 @@
 import Foundation
 import Security
 
-internal class URLSessionPinningDelegate: NSObject, URLSessionDelegate {
+public protocol PinnableSessionDelegate: URLSessionDelegate {
+    var certificatePaths: [String] { get set }
+}
+
+internal class URLSessionPinningDelegate: NSObject, PinnableSessionDelegate {
     var certificatePaths: [String] = []
 
     func urlSession(

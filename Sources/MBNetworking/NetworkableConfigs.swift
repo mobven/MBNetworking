@@ -35,6 +35,12 @@ public enum NetworkableConfigs {
     public func setServerTrustedURLAuthenticationChallenge() {
         Session.shared.setServerTrustedURLAuthenticationChallenge()
     }
+    
+    /// Configures networking delegate and session with passed PinnableSessionDelegate. This method must called before setCertificatePathArray to set it's certificate paths.
+    /// - parameter challenge: PinnableSessionDelegate.
+    public func setServerTrustedAuthenticationChallenge(_ challenge: PinnableSessionDelegate) {
+        Session.shared.setServerTrustedAuthenticationChallenge(challenge)
+    }
 
     /// Sets `URLSessionConfiguration` for initiating `URLSession`.
     /// Default value is `URLSessionConfiguration.default` which can be set to `URLSessionConfiguration.ephemeral`.
