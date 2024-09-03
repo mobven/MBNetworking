@@ -67,6 +67,12 @@ internal class URLSessionPinningDelegate: NSObject, PinnableSessionDelegate {
 
 extension URLSessionPinningDelegate: URLSessionTaskDelegate {
     func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
+        logTask(task, didFinishCollecting: metrics)
+    }
+}
+
+extension PinnableSessionDelegate {
+    func logTask(_ task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
         Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didFinishCollecting: metrics)
     }
 }
