@@ -1,5 +1,5 @@
 //
-//  NetworkablePerformanceLegacyTests.swift
+//  NetworkablePerformanceTests.swift
 //  MBNetworkingTests
 //
 //  Created by Rashid Ramazanov on 2/23/22.
@@ -13,7 +13,7 @@
     @testable import MBNetworking
     @testable import MobKitCore
 
-    class NetworkablePerformanceLegacyTests: XCTestCase {
+    class NetworkablePerformanceTests: XCTestCase {
         var imageView: UIImageView = .init()
 
         override func setUp() {

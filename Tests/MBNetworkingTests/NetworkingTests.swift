@@ -1,5 +1,5 @@
 //
-//  NetworkingLegacyTests.swift
+//  NetworkingTests.swift
 //  NetworkingTests
 //
 //  Created by Rasid Ramazanov on 17.02.2020.
@@ -11,7 +11,7 @@ import XCTest
 @testable import MobKitCore
 
 #if canImport(UIKit)
-    class NetworkingLegacyTests: XCTestCase {
+    class NetworkingTests: XCTestCase {
         override func setUp() {
             MobKit.isDeveloperModeOn = true
             StubURLProtocol.delay = .zero

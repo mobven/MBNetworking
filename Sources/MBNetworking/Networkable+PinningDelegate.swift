@@ -18,7 +18,7 @@ enum URLSessionPinningComposer {
         if #available(iOS 13.0, *) {
             URLSessionPinningDelegateAsync()
         } else {
-            URLSessionPinningDelegateLegacy()
+            URLSessionPinningDelegate()
         }
     }
 }
@@ -29,7 +29,7 @@ extension URLSessionPinningDelegateProtocol {
     }
 }
 
-private final class URLSessionPinningDelegateLegacy: NSObject, URLSessionPinningDelegateProtocol {
+private final class URLSessionPinningDelegate: NSObject, URLSessionPinningDelegateProtocol {
     var certificatePaths: [String] = []
 
     func urlSession(

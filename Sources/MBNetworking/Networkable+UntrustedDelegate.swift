@@ -13,7 +13,7 @@ enum UntrustedURLSessionComposer {
         if #available(iOS 13.0, *) {
             UntrustedURLSessionDelegateAsync()
         } else {
-            UntrustedURLSessionDelegateLegacy()
+            UntrustedURLSessionDelegate()
         }
     }
 }
@@ -27,7 +27,7 @@ enum UntrustedURLSessionComposer {
     }
 }
 
-class UntrustedURLSessionDelegateLegacy: NSObject, URLSessionDelegate {
+class UntrustedURLSessionDelegate: NSObject, URLSessionDelegate {
     func urlSession(
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge,
