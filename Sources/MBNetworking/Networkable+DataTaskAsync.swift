@@ -75,34 +75,16 @@ import MBErrorKit
             throw error
         }
     }
-    
+
     private func requestData(_ urlRequest: URLRequest) async -> (URLResponse?, Data?, Error?) {
-        // TODO: Handle Async flow
-//        let taskId = UUID().uuidString
-//        let task = Session.shared.session.dataTask(with: urlRequest)
-        
+        // TODO: Should async support Session.shared.taskInProgress cancellation logic?
+
         do {
             let (data, response) = try await Session.shared.session.data(for: urlRequest)
-            
-            // TODO: Handle Async flow
-//            Session.shared.networkLogMonitoringDelegate?.logDataTask(dataTask: task, didReceive: data)
-//            Session.shared.tasksInProgress.removeValue(forKey: taskId)
-            
-            
-            self.printResponse(data)
+            printResponse(data)
             return (response, data, nil)
         } catch {
-//            if let task = Session.shared.tasksInProgress[taskId] {
-//                Session.shared.networkLogMonitoringDelegate?.logTask(task: task, didCompleteWithError: error)
-//            }
-//            Session.shared.tasksInProgress.removeValue(forKey: taskId)
-            
             return (nil, nil, error)
         }
-        
-        // TODO: Handle Async flow
-//        Session.shared.networkLogMonitoringDelegate?.logTaskCreated(task: task)
-//        task.resume()
-//        Session.shared.tasksInProgress.updateValue(task, forKey: taskId)
     }
 }
