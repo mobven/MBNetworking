@@ -16,9 +16,9 @@ protocol URLSessionPinningDelegateProtocol: URLSessionDelegate {
 enum URLSessionPinningComposer {
     static func createDelegate() -> URLSessionPinningDelegateProtocol {
         if #available(iOS 13.0, *) {
-            return URLSessionPinningDelegateAsync()
+            URLSessionPinningDelegateAsync()
         } else {
-            return URLSessionPinningDelegateLegacy()
+            URLSessionPinningDelegateLegacy()
         }
     }
 }
@@ -53,7 +53,7 @@ private final class URLSessionPinningDelegateAsync: NSObject, URLSessionPinningD
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge
     ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
-        return URLSessionPinningHelper.processAuthenticationChallenge(
+        URLSessionPinningHelper.processAuthenticationChallenge(
             challenge: challenge,
             certificatePaths: certificatePaths
         )
