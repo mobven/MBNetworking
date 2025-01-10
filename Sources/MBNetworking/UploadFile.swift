@@ -9,7 +9,7 @@
 import Foundation
 
 /// Multipart body file
-public struct File {
+public struct File: Encodable {
     
     /// Key of multipart form data.
     public var name: String
