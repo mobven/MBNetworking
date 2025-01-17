@@ -59,7 +59,7 @@ extension Networkable {
                 self.printErrorLog(error)
                 completion(.failure(error))
 
-            } else if let response = response, data == nil || data?.count == 0 {
+            } else if let response = response, data == nil {
                 let error = MBErrorKit.NetworkingError.dataTaskError(response, data)
                 MBErrorKit.ErrorKit.shared().delegate?.errorKitDidCatch(networkingError: error)
                 self.printErrorLog(error)
