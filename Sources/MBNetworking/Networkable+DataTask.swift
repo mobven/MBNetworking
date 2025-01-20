@@ -65,7 +65,7 @@ extension Networkable {
                 self.printErrorLog(error)
                 completion(.failure(error))
 
-            } else if let data = data, data.count > 0 {
+            } else if let data = data {
                 do {
                     // If requested decodable type is Data, received data will be returned.
                     if V.Type.self == Data.Type.self {
